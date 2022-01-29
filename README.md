@@ -2,15 +2,16 @@
 
 A package for flexibly LaTeXing choice items based on hlist environment and coffin.
 
-Repository: https://github.com/xkwxdyy/xchoices
+Github Repository: https://github.com/xkwxdyy/xchoices
 
-Repository: https://gitee.com/xkwxdyy/xchoices
+Gitee Repository: https://gitee.com/xkwxdyy/xchoices
 
 Author: Kangwei Xia <kangweixia_xdyy@163.com>
 
 ## 宏包说明
 
 本宏包为本人前段时间编写的宏包`choices`的重新推翻编写的版本，并增加了许多功能：
+（choices宏包仓库：[github](https://github.com/xkwxdyy/xchoices), [gitee](https://gitee.com/xkwxdyy/xchoices)）
 
 ### 变更
 - 原`\choices`命令更改为`\xchoices`
