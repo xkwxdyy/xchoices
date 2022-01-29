@@ -5,6 +5,7 @@
 \bool_if:NT \__xchoices_env_show_answer_bool
   { \q_recursion_stop }   % 看上去像停止循环的代码但是实际使用会一直编译不停
 ```
+- 保持答案正常的乱序功能
 
 ### [v0.0.1] - 2022-01-29
 
@@ -17,6 +18,9 @@
 - 在`choices`宏包基础上增加了`hlistchoice`命令的`vsep`和`hsep`的键值设置（通过sethlist接口）
 - 完成答案显示与解析控制
 - 增加选择题括号命令`\paren`
+
+#### Changed
+- 重新修订`README.md`文件
 
 ## 仓库地址
 
