@@ -1,6 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}[2018/04/01]
 \RequirePackage{expl3}
-\ProvidesExplPackage {xchoices} {2022-01-28} {0.0.1}
+\ProvidesExplPackage {xchoices} {2022-01-29} {0.0.1}
   {
     A package for flexibly LaTeXing choice items based on hlist environment and coffin.
     Kangwei Xia
@@ -22,7 +22,9 @@
 %%%% 宏包载入 %%%%
 \RequirePackage{ hlist }     % 对位宏包
 \RequirePackage{ varwidth }
-\RequirePackage{ tikz }      % 绘制带圈数字
+\RequirePackage{ tikz }      % 绘制带圈数字，\quan需要
+\RequirePackage{ xcolor }    % 颜色
+\RequirePackage{ linegoal }  % 获取当前行剩下的距离，\paren需要
 
 % % hlist相关参数设置
 % \sethlist
@@ -46,8 +48,16 @@
 \tl_new:N \l__xchoices_prelabel_tl    % label前面的内容
 \tl_new:N \l__xchoices_hlist_label_style_tl   % label的样式
 \tl_new:N \l__xchoices_postlabel_tl   % label后面的内容
-
-
+\str_new:N \l__xchoices_current_label_style_str  % 储存当前的label-style
+% 输出正确答案的在第几项（可能是多选，所以用seq）
+\seq_new:N \l__xchoices_env_correct_items_number_seq 
+\bool_new:N \__xchoices_env_show_answer_bool  % 控制最终是否要显示，不仅是为了可以手动控制，还是为了当没有设置正确答案的时候不出现“参考答案”等字样
+\bool_new:N \l__xchoices_env_show_analysis_bool   % 控制是否显示解析
+\tl_new:N \l__xchoices_answer_analysis_content_tl    % 答案解析的内容
+\tl_new:N \l__xchoices_env_analysis_label_color_tl    % “解析”的颜色
+\tl_new:N \l__xchoices_env_analysis_label_content_tl   % “解析”字样的内容，包括字体之类的，比用pre，post灵活性更高
+\tl_new:N \l__xchoices_env_answer_label_color_tl    % “参考答案”的颜色
+\tl_new:N \l__xchoices_env_answer_label_content_tl   % “参考答案”字样的内容，包括字体之类的，比用pre，post灵活性更高
 %% quan 相关变量
 \dim_new:N \l__quan_height_of_number_dim        % quan: 储存数字的高度
 \dim_new:N \l__quan_radius_of_circle_dim        % quan: 圆的半径
@@ -62,6 +72,7 @@
 \cs_generate_variant:Nn \dim_set:Nn { Nv, cv}
 \cs_generate_variant:Nn \dim_max:nn { Vv }
 \cs_generate_variant:Nn \seq_set_split:Nnn {NnV}
+\prg_generate_conditional_variant:Nnn \str_if_eq:nn {Vn} {TF}
 %%%% 键值设置 %%%%
 
 % 错误键值的报错信息
@@ -73,9 +84,11 @@
   {
     \number\csname c@\detokenize{#1} \endcsname
   }
+
 % 注意键值里面用到函数的话，函数要在之前定义好
 \cs_new:Npn \__xchoices_hlist_label_style_set:n #1
   {
+    \str_set:Nn \l__xchoices_current_label_style_str {#1}
     \str_if_eq:nnTF {#1} { quan }
       {
         \tl_set:Nn \l__xchoices_hlist_label_style_tl
@@ -119,6 +132,28 @@
     % 两列之间的额外间距
     hsep .dim_set:N = \l__xchocies_hlist_hsep_dim,
     hsep .initial:n = 0pt,
+    % 是否显示答案
+    showanswer .bool_set:N = \__xchoices_env_show_answer_bool,
+    showanswer .default:n = true,
+    showanswer .initial:n = false,
+    % “参考答案”label的内容
+    answer-label-content .tl_set:N = \l__xchoices_env_answer_label_content_tl,
+    answer-label-content .initial:n = {【参考答案】},
+    % “参考答案”label的颜色
+    answer-label-color .tl_set:N = \l__xchoices_env_answer_label_color_tl,
+    answer-label-color .initial:n = violet,
+    % 是否显示解析
+    showanalysis .bool_set:N = \l__xchoices_env_show_analysis_bool,
+    showanalysis .default:n = true,
+    showanalysis .initial:n = false,
+    % “解析”label的颜色
+    analysis-label-color .tl_set:N = \l__xchoices_env_analysis_label_color_tl,
+    analysis-label-color .initial:n = violet,
+    % “解析”label的内容
+    analysis-label-conent .tl_set:N = \l__xchoices_env_analysis_label_content_tl,
+    analysis-label-conent .initial:n = {【解析】},
+    % 解析的内容
+    analysis-content .tl_set:N = \l__xchoices_answer_analysis_content_tl,
     unknown .code:n = { \msg_error:nnn { xchoices } { unknown-option } {#1} }
   }
 
@@ -294,8 +329,114 @@
       {
         \box_new:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box }
       }
+    \bool_if_exist:cF { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _bool}
+      {
+        \bool_new:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _bool }
+      }
+    % 将错误答案对应项数的bool设置为false
+    \bool_set_false:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _bool}
     \hbox_set:cw { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box }
       \begin{varwidth}{\hsize}
+  }
+% 用来设置标记为正确答案的选项
+\cs_new:Nn \__xchoices_env_xitem_new_correct:
+  {
+    % 如果是第一项的话就不需要\__xchoices_env_xitem_out:
+    % 只有第二项开始才需要处理上一个
+    \int_compare:nNnF { \l__xchoices_env_xitem_int } = { 0 }
+      { \__xchoices_env_xitem_out: }
+    % xitem计数器的值+1
+    \int_incr:N \l__xchoices_env_xitem_int
+    % 测试一下是否存在了对应值的box，不存在的话新声明一个
+    \box_if_exist:cF { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box }
+      {
+        \box_new:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box }
+      }
+    \bool_if_exist:cF { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _bool}
+      {
+        \bool_new:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _bool }
+      }
+    % 将正确答案对应项数的bool设置为true
+    \bool_set_true:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _bool}
+    \hbox_set:cw { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box }
+      \begin{varwidth}{\hsize}
+  }
+  % 用来储存正确items的项数
+\cs_new:Nn \__xchoices_env_output_correct_items_number_to_seq:
+  {
+    \int_step_inline:nn { \l__xchoices_items_number_int }
+      {
+        % 如果对应的bool是正确的就把这个数字存到\l__xchoices_env_correct_items_number_seq
+        \bool_if:cT { l__xchoices_env_ \int_to_roman:n {##1} _bool}
+          {
+            \seq_put_right:Nn \l__xchoices_env_correct_items_number_seq {##1}
+          }
+      }
+  }
+
+% 由xitem的带*情况bool判断是否要开启\__xchoices_env_show_answer_bool
+% 但发现还是一开始不管有没有*都不显示
+% #1为seq的项数 \l__xchoices_items_number_int
+% \cs_new:Npn \__xchoices_env_determine_show_answer:N #1
+%   {
+%     \int_step_inline:nn {#1}
+%       {
+%         \bool_if:cT { l__xchoices_env_ \int_to_roman:n {##1} _bool }
+%           {
+%             \bool_set_true:N \__xchoices_env_show_answer_bool
+%           }
+%         % 如果\__xchoices_env_show_answer_bool已经是true的话结束循环
+%         % 因为只要有一个正确答案以上就要显示
+%         % 【待解决】目前代码有问题
+%         % \bool_if:NT \__xchoices_env_show_answer_bool
+%         %   { \q_recursion_stop }
+%       }
+%   }
+\cs_new:Npn \__xchoices_env_show_correct_answer:N #1
+  {
+    \bool_if:NT \__xchoices_env_show_answer_bool
+      {
+        \noindent
+        \textcolor
+          { \tl_use:N \l__xchoices_env_answer_label_color_tl}
+          { \tl_use:N \l__xchoices_env_answer_label_content_tl }
+        %% 先将正确答案seq的数字用当前的label-style转换一下
+        \__xchoices_env_correct_number_transform_by_label_style:N #1
+        % 只用循环的话会造成最后一项最后也有, 
+        % \seq_map_inline:Nn #1 {##1~}
+        % 采用seq_use的方法
+        % 三个{} 内依次是：只有两个的之间的、超过两个时前面几个之间的、超过两个时最后两个直接的
+        % \seq_use:Nnnn #1 { ~and~ } { ,~ } { ,~and~ }
+        \seq_use:Nnnn #1 { ,~ } { ,~ } { ,~ }
+      }
+  }
+\seq_new:N \l__xchoices_tmpa_seq   % 临时变量
+\cs_new:Npn \__xchoices_env_correct_number_transform_by_label_style:N #1
+  {
+    % 先把#1seq的map-inline的方式通过label-style转化储存到\l__xchoices_tmpa_seq
+    \seq_map_inline:Nn #1
+      {
+        \seq_put_right:Nn \l__xchoices_tmpa_seq
+          {
+            \__xchoices_current_label_transform_int:n {##1}
+          }
+      }
+    % 然后再令#1和\l__xchoices_tmpa_seq相等
+    \seq_set_eq:NN #1 \l__xchoices_tmpa_seq
+    % 然后清空\l__xchoices_tmpa_seq
+    \seq_clear:N \l__xchoices_tmpa_seq
+  }
+\cs_new:Npn \__xchoices_current_label_transform_int:n #1
+  {
+    \str_if_eq:VnTF \l__xchoices_current_label_style_str {quan}
+      { \quan{#1} }
+      {
+        \str_if_eq:VnTF \l__xchoices_current_label_style_str {arabic}
+          {#1}
+          {
+            \use:c { int_to_ \l__xchoices_current_label_style_str :n }{#1}
+          }
+      }
   }
 \cs_new:Nn \__xchoices_env_xitem_out:
   {
@@ -305,16 +446,31 @@
     \seq_put_right:Nx \l__xchoices_env_items_seq { \box_use:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box } }
   }
 
+\cs_new:Nn \__xchoices_env_analysis_out: 
+  {
+    \bool_if:NTF \l__xchoices_env_show_analysis_bool
+      {
+        \par \noindent
+        \textcolor
+          { \tl_use:N \l__xchoices_env_analysis_label_color_tl }
+          { \tl_use:N \l__xchoices_env_analysis_label_content_tl }
+        \par \tl_use:N \l__xchoices_answer_analysis_content_tl
+      }
+      {}
+  }
 
 \NewDocumentEnvironment { xchoice } { O{} }
   {
     \group_begin:
       \int_zero:N \l__xchoices_env_xitem_int   % 先将xitem计数器设置为0
+      \tl_clear:N \l__xchoices_answer_analysis_content_tl
   }
   {
       \__xchoices_env_xitem_out:
       \__xchoices_handle_seq_after_check:N
         \l__xchoices_env_items_seq
+      \__xchoices_env_output_correct_items_number_to_seq:
+      % \__xchoices_env_determine_show_answer:N \l__xchoices_items_number_int
       \keys_set:nn { xchoices / hlistchoices } {#1}
       \__xchoices_hlist_output:NNNNN
         \l__xchoices_env_items_seq
@@ -322,14 +478,24 @@
         \l__xchoices_prelabel_tl
         \l__xchoices_hlist_label_style_tl
         \l__xchoices_postlabel_tl
+      \__xchoices_env_show_correct_answer:N
+        \l__xchoices_env_correct_items_number_seq
+      % 输出解析
+      \__xchoices_env_analysis_out: 
     \group_end:
   }
 
-\NewDocumentCommand { \xitem } {}
+\NewDocumentCommand { \xitem } { s }
   {
-    \__xchoices_env_xitem_new:
+    \IfBooleanTF{#1}
+      { \__xchoices_env_xitem_new_correct: }
+      { \__xchoices_env_xitem_new: }
   }
 
+\NewDocumentCommand{ \xchoicesetup }{ m }
+  {
+    \keys_set:nn { xchoices / hlistchoices } {#1}
+  }
 % 带圈数字
 \NewDocumentCommand{ \quan }{ m }
   {
@@ -380,6 +546,19 @@
       }
   }
 
+% \paren 
+\NewDocumentCommand{ \paren } {  }
+  {
+    \group_begin:
+      % \keys_set:nn { paren-answer } {#1}
+      \tl_set:Nn \l__paren_answer_tl
+        { \qquad }
+      \dim_set_eq:NN \l_tmpa_dim \linegoal
+      \dim_compare:nNnT { \l_tmpa_dim } < { \textwidth/50 }
+        { \par }
+      \hfill \makebox{(\tl_use:N \l__paren_answer_tl)}
+    \group_end:
+  }
 % hlist相关参数设置
 \sethlist
   {
