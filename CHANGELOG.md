@@ -8,6 +8,7 @@
 - 完成`xchoice`环境的编写
 - 完成数据预处理函数的编写
 - 完成原`choices`宏包中`hlistchoice`命令的迁移改写
+- 在`choices`宏包基础上增加了`hlistchoice`命令的`vsep`和`hsep`的键值设置（通过sethlist接口）
 
 ## 仓库地址
 

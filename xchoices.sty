@@ -24,12 +24,13 @@
 \RequirePackage{ varwidth }
 \RequirePackage{ tikz }      % 绘制带圈数字
 
-% hlist相关参数设置
-\sethlist
-  {
-    pre~label = ,           % 使得label没有加粗效果
-    label~align = right,    % label的默认对齐方式是右对齐
-  }
+% % hlist相关参数设置
+% \sethlist
+%   {
+%     pre~label   = ,           % 使得label没有加粗效果
+%     label~align = right,    % label的默认对齐方式是右对齐
+%     item~sep    = 0.5em,
+%   }
 
 %%%% 变量声明 %%%%
 \seq_new:N \l__xchoices_items_seq   % 用于储存最终分隔开的选项信息
@@ -79,7 +80,7 @@
       {
         \tl_set:Nn \l__xchoices_hlist_label_style_tl
           { \quan { \__xchoices_arabic_counter:n { hlisti } } }
-        \tl_set:Nn \l__xchoices_poslabel_tl {~}
+        \tl_set:Nn \l__xchoices_postlabel_tl {~}
         \tl_set:Nn \l__xchoices_prelabel_tl {}
       }
       {
@@ -112,6 +113,12 @@
     label-style .code:n =
       { \__xchoices_hlist_label_style_set:n {#1} },
     label-style .initial:n = Alph,
+    % 两行之间的额外间距
+    vsep .dim_set:N = \l__xchocies_hlist_vsep_dim,
+    vsep .initial:n = 0pt,
+    % 两列之间的额外间距
+    hsep .dim_set:N = \l__xchocies_hlist_hsep_dim,
+    hsep .initial:n = 0pt,
     unknown .code:n = { \msg_error:nnn { xchoices } { unknown-option } {#1} }
   }
 
@@ -371,4 +378,19 @@
         \draw (0, \dim_use:N \l__quan_height_of_number_dim / 2 )
           circle ( \l__quan_radius_of_circle_dim );
       }
+  }
+
+% hlist相关参数设置
+\sethlist
+  {
+    pre~label   = ,           % 使得label没有加粗效果
+    label~align = right,    % label的默认对齐方式是右对齐
+    item~sep    =
+      {
+        \dim_eval:n { 0.5em + \l__xchocies_hlist_vsep_dim }
+      },
+    col~sep = 
+      {
+        \dim_eval:n { 2.5em + \l__xchocies_hlist_hsep_dim }
+      },
   }
