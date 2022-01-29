@@ -15,7 +15,18 @@ Author: Kangwei Xia <kangweixia_xdyy@163.com>
 
 ### 变更
 - 原`\choices`命令更改为`\xchoices`
-- 完成基于`hlist`环境的`\xchoices`命令的重写
+- 完成基于`hlist`环境的`\xchoices`命令的重写，用法不变，使用`&&`分隔
+```tex
+\xchoices{
+  选项1 &&
+  选项2 &&
+  选项3 &&
+  选项4 &&
+  选项5 &&
+  选项6 &&
+}
+```
+![](https://raw.githubusercontent.com/xkwxdyy/image/main/postimage/image-hosting/20220129220920.png)
 - 更改全局设置接口为`\xchoicesetup`
 
 ### 新增
@@ -46,6 +57,7 @@ Author: Kangwei Xia <kangweixia_xdyy@163.com>
     - quan：带圈数字
     - alph：小写英文字母
     - Alph：大写英文字母
+    - none：没有label
   - vsep：两行选项之间的额外垂直偏移量（通过`\sethlist`接口实现）
   - hsep：两列选项之间的额外垂直偏移量（通过`\sethlist`接口实现）
   - showanswer：控制答案显示
