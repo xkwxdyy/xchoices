@@ -89,25 +89,33 @@
 \cs_new:Npn \__xchoices_hlist_label_style_set:n #1
   {
     \str_set:Nn \l__xchoices_current_label_style_str {#1}
-    \str_if_eq:nnTF {#1} { quan }
+    \str_if_eq:nnTF {#1} {none}
       {
-        \tl_set:Nn \l__xchoices_hlist_label_style_tl
-          { \quan { \__xchoices_arabic_counter:n { hlisti } } }
-        \tl_set:Nn \l__xchoices_postlabel_tl {~}
+        \tl_set:Nn \l__xchoices_hlist_label_style_tl {}
+        \tl_set:Nn \l__xchoices_postlabel_tl {}
         \tl_set:Nn \l__xchoices_prelabel_tl {}
       }
       {
-        \str_if_eq:nnTF {#1} { arabic }
+        \str_if_eq:nnTF {#1} { quan }
           {
             \tl_set:Nn \l__xchoices_hlist_label_style_tl
-              {
-                \__xchoices_arabic_counter:n { hlisti }
-              }
+              { \quan { \__xchoices_arabic_counter:n { hlisti } } }
+            \tl_set:Nn \l__xchoices_postlabel_tl {~}
+            \tl_set:Nn \l__xchoices_prelabel_tl {}
           }
           {
-            \tl_set:Nn \l__xchoices_hlist_label_style_tl
+            \str_if_eq:nnTF {#1} { arabic }
               {
-                \cs:w #1 \cs_end: { hlisti }
+                \tl_set:Nn \l__xchoices_hlist_label_style_tl
+                  {
+                    \__xchoices_arabic_counter:n { hlisti }
+                  }
+              }
+              {
+                \tl_set:Nn \l__xchoices_hlist_label_style_tl
+                  {
+                    \cs:w #1 \cs_end: { hlisti }
+                  }
               }
           }
       }
@@ -416,7 +424,7 @@
     % 先把#1seq的map-inline的方式通过label-style转化储存到\l__xchoices_tmpa_seq
     \seq_map_inline:Nn #1
       {
-        \seq_put_right:Nn \l__xchoices_tmpa_seq
+        \seq_put_right:Nx \l__xchoices_tmpa_seq
           {
             \__xchoices_current_label_transform_int:n {##1}
           }
@@ -428,13 +436,17 @@
   }
 \cs_new:Npn \__xchoices_current_label_transform_int:n #1
   {
-    \str_if_eq:VnTF \l__xchoices_current_label_style_str {quan}
-      { \quan{#1} }
+    \str_if_eq:VnTF \l__xchoices_current_label_style_str {none}
+      { item~#1 }
       {
-        \str_if_eq:VnTF \l__xchoices_current_label_style_str {arabic}
-          {#1}
+        \str_if_eq:VnTF \l__xchoices_current_label_style_str {quan}
+          { \quan{#1} }
           {
-            \use:c { int_to_ \l__xchoices_current_label_style_str :n }{#1}
+            \str_if_eq:VnTF \l__xchoices_current_label_style_str {arabic}
+              {#1}
+              {
+                \use:c { int_to_ \l__xchoices_current_label_style_str :n }{#1}
+              }
           }
       }
   }
