@@ -18,13 +18,11 @@ Author: Kangwei Xia <kangweixia_xdyy@163.com>
 ### 变更
 - `choices`宏包更名为`xchoices`宏包，`x`寓意为`etra`，可以避免与`exam.cls`冲突，并能同时使用
 - 更改全局设置接口为`\xchoicesetup`
-- 去除了原有的`\choices`命令，而改用新增的`xchoices`与`xchoices*`环境
-  - `xchoices`环境基于`hlist`环境，相当于原`choices`宏包的`\choices`命令
-  - `xchoices*`环境基于`hlist`环境与`coffin`，相当于原`choices`宏包的`\choices*`命令
+- 统一所有选项排版命令为`xchoices`环境
 
 ### 新增
 - 新增了选择题的括号命令`\paren`，默认到该行行尾，内容多时自动到下一行行尾
-- 增加了代码风格类似于`list`环境的`xchoices`环境与`xchoices*`环境，用`\item`分隔每一项，使选项分隔结构更清晰
+- 增加了代码风格类似于`list`环境的`xchoices`环境，用`\item`分隔每一项，使选项分隔结构更清晰
 - 基于`xchoices`环境下增加了答案的控制显示，`\item*`表示该项为正确答案，支持多选题。示例如下
 ```tex
 <题干内容>，下面正确的是\paren
