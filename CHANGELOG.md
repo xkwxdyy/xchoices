@@ -11,6 +11,7 @@
 #### Added
 - 基本完成`coffinchoice`命令的重写
 - 增加插图判断
+- 完善`coffinchoice`不同方位的细节调整
 
 #### Changed
 - 当`label-pos`为`right`系列时，修改label样式为形如".A"
