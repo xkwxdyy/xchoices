@@ -1600,6 +1600,9 @@
 \NewDocumentEnvironment { xchoices } { O{} }
   {
     \group_begin:
+      % \cs_set_eq:NN \item \__xchoices_env_xitem_new:
+      % \cs_set_eq:cN {item*}
+      % \__xchoices_env_xitem_new_correct:
       \vspace*{ \l__xchoices_env_top_distance_dim }
       \int_zero:N \l__xchoices_env_xitem_int   % 先将xitem计数器设置为0
       \tl_clear:N \l__xchoices_answer_analysis_content_tl
@@ -1661,7 +1664,6 @@
       { \__xchoices_env_xitem_new_correct: }
       { \__xchoices_env_xitem_new: }
   }
-
 \NewDocumentCommand{ \xchoicesetup }{ m }
   {
     \keys_set:nn { xchoices / hlistchoices } {#1}
