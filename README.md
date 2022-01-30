@@ -73,6 +73,7 @@ Author: Kangwei Xia <kangweixia_xdyy@163.com>
 
 ### 未完成
 - 可以改变label位置的`\coffinchoice`命令的重写
+  - 命令的下方间距
 - 增加乱序且答案显示正确的功能
 
 ## 参与贡献

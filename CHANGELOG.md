@@ -10,6 +10,10 @@
 ### [v0.0.2] - 2022-01-30
 #### Added
 - 基本完成`coffinchoice`命令的重写
+- 增加插图判断
+
+#### Changed
+- 当`label-pos`为`right`系列时，修改label样式为形如".A"
 
 #### Fixed
 - 修复`xchoice`环境的垂直位移偏差bug
