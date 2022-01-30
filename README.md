@@ -56,9 +56,7 @@ Author: Kangwei Xia <kangweixia_xdyy@163.com>
   - answer-label-color：答案label的颜色，初始值为`violet`
 
 ### 未完成
-- 键值的统一
 - 修改\xitem为\item
-
 - 增加乱序且答案显示正确的功能
 
 ## 参与贡献

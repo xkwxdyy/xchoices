@@ -148,6 +148,8 @@
     label-style .code:n =
       { \__xchoices_hlist_label_style_set:n {#1} },
     label-style .initial:n = Alph,
+    % label的水平偏移量
+    label-hsep .dim_set:N = \l__xchoices_hlist_label_horizontal_sep_dim,
     % 两行之间的额外间距
     v-sep .dim_set:N = \l__xchocies_hlist_vsep_dim,
     v-sep .initial:n = 0pt,
@@ -170,6 +172,10 @@
     % “参考答案”label的颜色
     answer-label-color .tl_set:N = \l__xchoices_env_answer_label_color_tl,
     answer-label-color .initial:n = violet,
+    %%% 与coffinchoices的键值统一 %%%
+    h-offset .code:n = ,
+    v-offset .code:n = ,
+    label-vsep .code:n = ,
     % % 是否显示解析
     % showanalysis .bool_set:N = \l__xchoices_env_show_analysis_bool,
     % showanalysis .default:n = true,
@@ -1271,6 +1277,7 @@
         {
           \dim_eval:n { 2.5em + \l__xchocies_hlist_hsep_dim }
         },
+      label~sep = \l__xchoices_hlist_label_horizontal_sep_dim,
       label = #3 #4 #5 
       ]\int_use:N #2
       \seq_map_inline:Nn #1 

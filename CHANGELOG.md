@@ -21,6 +21,7 @@
 
 #### Removed
 - 移除`\xchoices`命令，只保留`xchoices`环境
+- 去掉环境的“解析”接口
 
 #### Fixed
 - 修复`xchoice`环境的垂直位移偏差bug
