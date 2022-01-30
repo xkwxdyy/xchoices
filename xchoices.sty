@@ -58,6 +58,18 @@
 \tl_new:N \l__xchoices_env_analysis_label_content_tl   % “解析”字样的内容，包括字体之类的，比用pre，post灵活性更高
 \tl_new:N \l__xchoices_env_answer_label_color_tl    % “参考答案”的颜色
 \tl_new:N \l__xchoices_env_answer_label_content_tl   % “参考答案”字样的内容，包括字体之类的，比用pre，post灵活性更高
+
+\dim_new:N \l__xchoices_coffin_join_vertical_sep_dim     % join时的垂直偏移
+\dim_new:N \l__xchoices_coffin_join_horizontal_sep_dim   % join时的水平偏移
+\str_new:N \l__xchoices_coffin_current_label_pos_str     % 储存当前的label-pos
+\tl_new:N \l__xchoices_coffin_typeset_horizontal_position_tl    % coffintypeset出来的水平pole
+\tl_new:N \l__xchoices_coffin_typeset_verticle_position_tl    % coffintypeset出来的水平pole
+\dim_new:N \l__xchoices_coffin_hlist_vsep_dim     % coffinchoices里hlist的item sep
+\dim_new:N \l__xchoices_coffin_hlist_hsep_dim     % coffinchoices里hlist的col sep
+\tl_new:N \l__xchoices_coffin_label_style_tl   % coffinchoices的label样式
+\dim_new:N \l__xchoices_coffin_typeset_vertical_transform_dim   % coffinchoices的typeset的垂直偏移
+\dim_new:N \l__xchoices_coffin_typeset_horizontal_transform_dim   % coffinchoices的typeset的水平偏移
+
 %% quan 相关变量
 \dim_new:N \l__quan_height_of_number_dim        % quan: 储存数字的高度
 \dim_new:N \l__quan_radius_of_circle_dim        % quan: 圆的半径
@@ -73,6 +85,7 @@
 \cs_generate_variant:Nn \dim_max:nn { Vv }
 \cs_generate_variant:Nn \seq_set_split:Nnn {NnV}
 \prg_generate_conditional_variant:Nnn \str_if_eq:nn {Vn} {TF}
+\cs_generate_variant:Nn \coffin_typeset:Nnnnn {cVVnn}
 %%%% 键值设置 %%%%
 
 % 错误键值的报错信息
@@ -165,21 +178,332 @@
     unknown .code:n = { \msg_error:nnn { xchoices } { unknown-option } {#1} }
   }
 
-\NewDocumentCommand { \xchoices } { O{} +m }
+\cs_new:Npn \__xchoices_coffin_label_style_set:n #1
+  {
+    \str_set:Nn \l__xchoices_current_label_style_str {#1}
+    \str_if_eq:nnTF {#1} {none}
+      {
+        \tl_set:Nn \l__xchoices_postlabel_tl {}
+        \tl_set:Nn \l__xchoices_prelabel_tl {}
+      }
+      {
+        \str_if_eq:nnTF {#1} { quan }
+          {
+            \tl_set:Nn \l__xchoices_postlabel_tl {}
+            \tl_set:Nn \l__xchoices_prelabel_tl {}
+          }
+          {}
+      }
+  }
+\keys_define:nn { xchoices / coffinchoices }
+  {
+    % label的位置
+    label-pos .choices:nn =
+      {
+        top , top-left , top-center , top-right ,
+        bottom , bottom-left , bottom-center , bottom-right ,
+        left , left-top , left-center , left-bottom ,
+        right , right-top , right-center , right-bottom
+      }
+      { \str_set:NV \l__xchoices_coffin_current_label_pos_str \l_keys_choice_tl },
+    label-pos .initial:n = bottom,
+    % label样式
+    label-style .code:n = 
+      { \__xchoices_coffin_label_style_set:n {#1} },
+    label-style .initial:n = Alph,
+    % label的垂直偏移量
+    label-vsep .dim_set:N = \l__xchoices_coffin_join_vertical_sep_dim,
+    label-vsep .initial:n = 0pt,
+    % label的水平偏移量
+    label-hsep .dim_set:N = \l__xchoices_coffin_join_horizontal_sep_dim,
+    label-hsep .initial:n = 0pt,
+    % 每行多少个
+    items .int_set:N = \l__xchoices_items_per_line_int,
+  }
+\NewDocumentCommand { \xchoices } { s O{} +m }
   {
     \group_begin:
-      \__xchoices_with_ampersand_output:n {#2}
-      % 键值放在这是因为用户手动设置的per line的items数要覆盖前面自动计算的
-      \keys_set:nn { xchoices / hlistchoices } {#1}
-      % 用hlist环境排版
-      \__xchoices_hlist_output:NNNNN
-        \l__xchoices_items_seq
-        \l__xchoices_items_per_line_int
-        \l__xchoices_prelabel_tl
-        \l__xchoices_hlist_label_style_tl
-        \l__xchoices_postlabel_tl
+      % 数据预处理
+      \IfBooleanTF{#1}
+        {
+          \__xchoices_with_ampersand_output:nN {#3} \l__xchoices_items_seq
+          % 键值放在这是因为用户手动设置的per line的items数要覆盖前面自动计算的
+          \keys_set:nn { xchoices / coffinchoices } {#2}
+          % 用coffin来排版
+          \__xchoices_coffin_output:NNN
+            \l__xchoices_items_seq
+            \l__xchoices_items_per_line_int
+            \l__xchoices_items_number_int
+        }
+        {
+          \__xchoices_with_ampersand_output:nN {#3} \l__xchoices_items_seq
+          % 键值放在这是因为用户手动设置的per line的items数要覆盖前面自动计算的
+          \keys_set:nn { xchoices / hlistchoices } {#2}
+          % 用hlist环境排版
+          \__xchoices_hlist_output:NNNNN
+            \l__xchoices_items_seq
+            \l__xchoices_items_per_line_int
+            \l__xchoices_prelabel_tl
+            \l__xchoices_hlist_label_style_tl
+            \l__xchoices_postlabel_tl
+        }
     \group_end:
   }
+% coffin版本的输出
+\cs_new:Npn \__xchoices_coffin_output:NNN #1#2#3
+  {
+    % 新声明coffinchoices的label和content的coffin（个数？\l__xchoices_items_number_int）
+    % 此时要先处理label再存（pre-label、样式、post-label）
+    \__xchoices_coffin_new:N #3
+      % \l__xchoices_items_number_int
+    % 把seq内容存到content的coffin里
+    \__xchoices_coffin_store_content:NN
+      #3 #1
+      % \l__xchoices_items_number_int
+      % \l__xchoices_items_seq
+    % 根据当前的label-pos（采用text-figure类似的上下左右）决定如何join
+    \__xchoices_coffin_join:N #3
+      % \l__xchoices_items_number_int
+    % 把coffin给type出来
+    \__xchoices_coffin_typeset:NN #2 #3
+      \l__xchoices_items_per_line_int
+      \l__xchoices_items_number_int
+  }
+%$ 声明coffin以及处理label样式
+\cs_new:Npn \__xchoices_coffin_new:N #1
+  {
+    \int_step_inline:nn { #1 } 
+      {
+        %% 新声明coffin变量
+        % 存内容的coffin
+        \coffin_if_exist:cF
+          { l__xchoices_coffin_content_ \int_to_roman:n {##1} _coffin }
+          {
+            \coffin_new:c { l__xchoices_coffin_content_ \int_to_roman:n {##1} _coffin }
+          }
+        % 存label的coffin
+        \coffin_if_exist:cF
+          { l__xchoices_coffin_label_ \int_to_roman:n {##1} _coffin }
+          {
+            \coffin_new:c { l__xchoices_coffin_label_ \int_to_roman:n {##1} _coffin }
+          }
+        % 将label进行储存
+        \hcoffin_set:cn { l__xchoices_coffin_label_ \int_to_roman:n {##1} _coffin }
+          {
+            \l__xchoices_prelabel_tl
+            \__xchoices_current_label_transform_int:n {##1}
+            \l__xchoices_postlabel_tl
+          }
+      }
+  }
+%% 把seq中的选项存到coffin里
+% #1: seq的个数
+% #2: 要储存的那个seq
+\cs_new:Npn \__xchoices_coffin_store_content:NN #1#2
+  {
+    \int_step_inline:nn {#1}
+      {
+        \hcoffin_set:cn { l__xchoices_coffin_content_ \int_to_roman:n {##1} _coffin }
+          { \seq_item:Nn #2 {##1} }
+      }
+  }
+%% 确定join方式
+% \__xchoices_coffin_join:N \l__xchoices_items_number_int
+% #1: seq的个数
+\cs_new:Npn \__xchoices_coffin_join:N #1
+  {
+    \int_step_inline:nn {#1}
+      {
+        \use:c { __xchoices_label_pos_set_ \l__xchoices_coffin_current_label_pos_str :cc }
+          { l__xchoices_coffin_label_ \int_to_roman:n {##1} _coffin }
+          { l__xchoices_coffin_content_ \int_to_roman:n {##1} _coffin }
+      }
+  }
+
+\cs_new:cpn { __xchoices_label_pos_set_top-center:NN } #1#2
+  {
+    \coffin_join:NnnNnnnn
+      #1 { b } { hc }
+      #2 { t } { hc }
+      { \l__xchoices_coffin_join_horizontal_sep_dim }
+      { -0.3em + \l__xchoices_coffin_join_vertical_sep_dim }
+    % 两行之间的垂直偏移量
+    \dim_set:Nn \l__xchoices_coffin_hlist_vsep_dim { 0.5em }
+    % typeset的水平pole
+    \tl_set:Nn \l__xchoices_coffin_typeset_horizontal_position_tl { hc }
+    % typeset的垂直pole
+    \tl_set:Nn \l__xchoices_coffin_typeset_verticle_position_tl { t }
+    % typeset的水平偏移
+    \dim_set:Nn \l__xchoices_coffin_typeset_horizontal_transform_dim 
+      { 2.5em }
+    % typeset的垂直偏移
+    \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
+      { 0em }
+  }
+\cs_new:cpn { __xchoices_label_pos_set_top:NN } #1#2
+  {
+    \coffin_join:NnnNnnnn
+      #1 { b } { hc }
+      #2 { t } { hc }
+      { \l__xchoices_coffin_join_horizontal_sep_dim }
+      { \l__xchoices_coffin_join_vertical_sep_dim }
+  }
+\cs_new:cpn { __xchoices_label_pos_set_top-left:NN } #1#2
+  {
+    \coffin_join:NnnNnnnn
+      #1 { t } { r }
+      #2 { t } { l }
+      { \l__xchoices_coffin_join_horizontal_sep_dim }
+      { \l__xchoices_coffin_join_vertical_sep_dim }
+  }
+\cs_new:cpn { __xchoices_label_pos_set_top-right:NN } #1#2
+  {
+    \coffin_join:NnnNnnnn
+      #1 { b } { r }
+      #2 { t } { r }
+      { \l__xchoices_coffin_join_horizontal_sep_dim }
+      { \l__xchoices_coffin_join_vertical_sep_dim }
+  }
+\cs_new:cpn { __xchoices_label_pos_set_bottom:NN } #1#2
+  {
+    \coffin_join:NnnNnnnn
+      #1 { t } { hc }
+      #2 { b } { hc }
+      { \l__xchoices_coffin_join_horizontal_sep_dim }
+      { 5pt + \l__xchoices_coffin_join_vertical_sep_dim }
+  }
+\cs_new:cpn { __xchoices_label_pos_set_bottom-center:NN } #1#2
+  {
+    \coffin_join:NnnNnnnn
+      #1 { t } { hc }
+      #2 { b } { hc }
+      { \l__xchoices_coffin_join_horizontal_sep_dim }
+      { \l__xchoices_coffin_join_vertical_sep_dim }
+  }
+\cs_new:cpn { __xchoices_label_pos_set_bottom-left:NN } #1#2
+  {
+    \coffin_join:NnnNnnnn
+      #1 { t } { l }
+      #2 { b } { l }
+      { \l__xchoices_coffin_join_horizontal_sep_dim }
+      { \l__xchoices_coffin_join_vertical_sep_dim }
+  }
+\cs_new:cpn { __xchoices_label_pos_set_bottom-right:NN } #1#2
+  {
+    \coffin_join:NnnNnnnn
+      #1 { t } { r }
+      #2 { b } { r }
+      { \l__xchoices_coffin_join_horizontal_sep_dim }
+      { \l__xchoices_coffin_join_vertical_sep_dim }
+  }
+\cs_new:cpn { __xchoices_label_pos_set_left:NN } #1#2
+  {
+    \coffin_join:NnnNnnnn
+      #1 { vc } { r }
+      #2 { vc } { l }
+      { \l__xchoices_coffin_join_horizontal_sep_dim }
+      { \l__xchoices_coffin_join_vertical_sep_dim }
+  }
+\cs_new:cpn { __xchoices_label_pos_set_left-center:NN } #1#2
+  {
+    \coffin_join:NnnNnnnn
+      #1 { vc } { r }
+      #2 { vc } { l }
+      { \l__xchoices_coffin_join_horizontal_sep_dim }
+      { \l__xchoices_coffin_join_vertical_sep_dim }
+  }
+\cs_new:cpn { __xchoices_label_pos_set_left-top:NN } #1#2
+  {
+    \coffin_join:NnnNnnnn
+      #1 { t } { r }
+      #2 { t } { l }
+      { \l__xchoices_coffin_join_horizontal_sep_dim }
+      { \l__xchoices_coffin_join_vertical_sep_dim }
+  }
+\cs_new:cpn { __xchoices_label_pos_set_left-bottom:NN } #1#2
+  {
+    \coffin_join:NnnNnnnn
+      #1 { b } { r }
+      #2 { b } { l }
+      { \l__xchoices_coffin_join_horizontal_sep_dim }
+      { \l__xchoices_coffin_join_vertical_sep_dim }
+  }
+\cs_new:cpn { __xchoices_label_pos_set_right:NN } #1#2
+  {
+    \coffin_join:NnnNnnnn
+      #1 { vc } { l }
+      #2 { vc } { r }
+      { \l__xchoices_coffin_join_horizontal_sep_dim }
+      { \l__xchoices_coffin_join_vertical_sep_dim }
+  }
+\cs_new:cpn { __xchoices_label_pos_set_right-center:NN } #1#2
+  {
+    \coffin_join:NnnNnnnn
+      #1 { vc } { l }
+      #2 { vc } { r }
+      { \l__xchoices_coffin_join_horizontal_sep_dim }
+      { \l__xchoices_coffin_join_vertical_sep_dim }
+  }
+\cs_new:cpn { __xchoices_label_pos_set_right-top:NN } #1#2
+  {
+    \coffin_join:NnnNnnnn
+      #1 { t } { l }
+      #2 { t } { r }
+      { \l__xchoices_coffin_join_horizontal_sep_dim }
+      { \l__xchoices_coffin_join_vertical_sep_dim }
+  }
+\cs_new:cpn { __xchoices_label_pos_set_right-bottom:NN } #1#2
+  {
+    \coffin_join:NnnNnnnn
+      #1 { b } { l }
+      #2 { b } { r }
+      { \l__xchoices_coffin_join_horizontal_sep_dim }
+      { \l__xchoices_coffin_join_vertical_sep_dim }
+  }
+% 产生变体
+\clist_map_inline:nn
+  {
+    top , top-left , top-center , top-right ,
+    bottom , bottom-left , bottom-center , bottom-right ,
+    left , left-top , left-center , left-bottom ,
+    right , right-top , right-center , right-bottom
+  }
+  {
+    \cs_generate_variant:cn
+      { __xchoices_label_pos_set_ #1 :NN } { cc }
+  }
+
+%% 把coffin按照自动计算的每行个数typeset出来（命令关键点）
+% #1: 每行个数
+% #2: 一共的项数
+\cs_new:Npn \__xchoices_coffin_typeset:NN #1#2
+  {
+    \begin{hlist}
+      [
+        % show~label = false,
+        label = ,
+        item~sep = 
+          {
+            \dim_eval:n { 1em + \l__xchoices_coffin_hlist_vsep_dim }
+          },
+        col~sep = 
+          {
+            \dim_eval:n { 0em + \l__xchoices_coffin_hlist_hsep_dim }
+          }
+      ]#1
+      \int_step_inline:nn {#2}
+        { 
+          \hitem
+          \coffin_typeset:cVVnn 
+            { l__xchoices_coffin_label_ \int_to_roman:n {##1} _coffin }
+            \l__xchoices_coffin_typeset_horizontal_position_tl
+            \l__xchoices_coffin_typeset_verticle_position_tl
+            { \l__xchoices_coffin_typeset_horizontal_transform_dim } 
+            { \l__xchoices_coffin_typeset_vertical_transform_dim }
+        }
+    \end{hlist}
+  }
+% hlist版本的输出
 \cs_new:Npn \__xchoices_hlist_output:NNNNN #1#2#3#4#5
   {
     \begin{hlist}[ label = #3 #4 #5 ]\int_use:N #2
@@ -188,15 +512,14 @@
     \end{hlist}
   }
 %% 用于接收带有&&的分隔内容
-\cs_new:Npn \__xchoices_with_ampersand_output:n #1
+\cs_new:Npn \__xchoices_with_ampersand_output:nN #1#2
   {
     % 先预处理接收的内容，看看末尾有没有&&，有的话就去掉
     \__xchoices_pre_check:n {#1}
     % 把处理后的内容储存到seq中
-    \seq_set_split:NnV \l__xchoices_items_seq {&&} \l__xchoices_items_pre_check_tl
+    \seq_set_split:NnV #2 {&&} \l__xchoices_items_pre_check_tl
     % 然后对seq进行后续的判断处理
-    \__xchoices_handle_seq_after_check:N
-      \l__xchoices_items_seq
+    \__xchoices_handle_seq_after_check:N #2
   }
 %% 最终将seq传入的函数
 \cs_new:Npn \__xchoices_handle_seq_after_check:N #1
@@ -209,8 +532,9 @@
       \l__xchoices_max_width_dim
       \l__xchoices_measure_width_i_dim
       \l__xchoices_items_number_int
-    % 根据最大值，确定hlist环境每行排版的个数
-    \__xchoices_hlist_auto_items_calc:NNN
+    % 根据最大值，确定每行排版的个数
+    % \__xchoices_auto_items_calc:NNN
+    \__xchoices_auto_items_calc:NNN
       \l__xchoices_items_per_line_int
       \l__xchoices_max_width_dim
       \l__xchoices_linewidth_dim
@@ -228,20 +552,22 @@
         \dim_set:Nn #1
           {
             \dim_max:Vv #1
-              { l__xchoices_measure_width_ \int_to_roman:n { ##1 } _dim }
+              { l__xchoices_measure_width_ \int_to_roman:n {##1} _dim }
           }
       }
   }
 %% 将最大宽度与行宽进行比较决定每行排多少个
-\cs_new:Npn \__xchoices_hlist_auto_items_calc:NNN #1#2#3
+\cs_new:Npn \__xchoices_auto_items_calc:NNN #1#2#3
   % #1: 每行的个数int变量
   % #2: 最大宽度
   % #3: 行宽
+  % #4: > #4行宽排每行一个
+  % #5: #2 行宽～ #4行宽 每行两个
   {
     % 先储存行宽
     \dim_set_eq:NN #3 \linewidth
     % 比较最大宽度与行宽
-    \dim_compare:nNnTF {#2} > { 0.4 #3 }
+    \dim_compare:nNnTF {#2} > { 0.45 #3 }
       { \int_set:Nn #1 {1} }
       {
         \dim_compare:nNnTF {#2} > { 0.2 #3 }
@@ -264,29 +590,29 @@
         % 之所以要先判断是否存在，是因为new出来的变量是全局的
         % 如果只是new的话，第二次使用就会出现already define的报错，下面的dim的声明也是同理
         \box_if_exist:cF
-          { l__xchoices_measure_width_ \int_to_roman:n { ##1 } _box }
+          { l__xchoices_measure_width_ \int_to_roman:n {##1} _box }
           {
             % 不存在的话就新定义
-            \box_new:c { l__xchoices_measure_width_ \int_to_roman:n { ##1 } _box }
+            \box_new:c { l__xchoices_measure_width_ \int_to_roman:n {##1} _box }
           }
         % 声明dim变量
         \dim_if_exist:cF
-          { l__xchoices_measure_width_ \int_to_roman:n { ##1 } _dim}
+          { l__xchoices_measure_width_ \int_to_roman:n {##1} _dim}
           {
             % 不存在的话就新定义
-            \dim_new:c { l__xchoices_measure_width_ \int_to_roman:n { ##1 } _dim }
+            \dim_new:c { l__xchoices_measure_width_ \int_to_roman:n {##1} _dim }
           }
         % 把每个选项存到对应的盒子里
-        \hbox_set:cn { l__xchoices_measure_width_ \int_to_roman:n { ##1 } _box }
+        \hbox_set:cn { l__xchoices_measure_width_ \int_to_roman:n {##1} _box }
           {
             \begin{varwidth}{\hsize}
-              \seq_item:Nn #1 { ##1 } 
+              \seq_item:Nn #1 {##1} 
             \end{varwidth}
           }
         % 把选项的长度进行储存
-        \dim_set:cn { l__xchoices_measure_width_ \int_to_roman:n { ##1 } _dim }
+        \dim_set:cn { l__xchoices_measure_width_ \int_to_roman:n {##1} _dim }
           {
-            \box_wd:c { l__xchoices_measure_width_ \int_to_roman:n { ##1 } _box }
+            \box_wd:c { l__xchoices_measure_width_ \int_to_roman:n {##1} _box }
           }
       }
   }
@@ -369,7 +695,19 @@
     \hbox_set:cw { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box }
       \begin{varwidth}{\hsize}
   }
-  % 用来储存正确items的项数
+\cs_new:Nn \__xchoices_env_xitem_out:
+  {
+      \end{varwidth}
+    \hbox_set_end:
+    % 把储存好内容的box传到seq里面
+    \seq_put_right:Nx \l__xchoices_env_items_seq 
+      { 
+        \mode_leave_vertical:
+        \box_move_up:nn {1pt}
+          { \box_use:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box } }
+      }
+  }
+% 用来储存正确items的项数
 \cs_new:Nn \__xchoices_env_output_correct_items_number_to_seq:
   {
     \int_step_inline:nn { \l__xchoices_items_number_int }
@@ -437,7 +775,7 @@
 \cs_new:Npn \__xchoices_current_label_transform_int:n #1
   {
     \str_if_eq:VnTF \l__xchoices_current_label_style_str {none}
-      { item~#1 }
+      {}
       {
         \str_if_eq:VnTF \l__xchoices_current_label_style_str {quan}
           { \quan{#1} }
@@ -450,13 +788,7 @@
           }
       }
   }
-\cs_new:Nn \__xchoices_env_xitem_out:
-  {
-      \end{varwidth}
-    \hbox_set_end:
-    % 把储存好内容的box传到seq里面
-    \seq_put_right:Nx \l__xchoices_env_items_seq { \box_use:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box } }
-  }
+
 
 \cs_new:Nn \__xchoices_env_analysis_out: 
   {
@@ -496,7 +828,32 @@
       \__xchoices_env_analysis_out: 
     \group_end:
   }
-
+\NewDocumentEnvironment { xchoice* } { O{} }
+  {
+    \group_begin:
+      \int_zero:N \l__xchoices_env_xitem_int   % 先将xitem计数器设置为0
+      \tl_clear:N \l__xchoices_answer_analysis_content_tl
+  }
+  {
+      \__xchoices_env_xitem_out:
+      \__xchoices_handle_seq_after_check:N
+        \l__xchoices_env_items_seq
+      \__xchoices_env_output_correct_items_number_to_seq:
+      % \__xchoices_env_determine_show_answer:N \l__xchoices_items_number_int
+      \keys_set:nn { xchoices / coffinchoices } {#1}
+      \__xchoices_coffin_output:NNN
+        \l__xchoices_env_items_seq
+        \l__xchoices_items_per_line_int
+        \l__xchoices_items_number_int
+        % \l__xchoices_prelabel_tl
+        % \l__xchoices_coffin_label_style_tl
+        % \l__xchoices_postlabel_tl
+      \__xchoices_env_show_correct_answer:N
+        \l__xchoices_env_correct_items_number_seq
+      % 输出解析
+      \__xchoices_env_analysis_out: 
+    \group_end:
+  }
 \NewDocumentCommand { \xitem } { s }
   {
     \IfBooleanTF{#1}
