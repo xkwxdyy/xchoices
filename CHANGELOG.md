@@ -12,9 +12,15 @@
 - 基本完成`coffinchoice`命令的重写
 - 增加插图判断
 - 完善`coffinchoice`不同方位的细节调整
+- 增加基于coffin的`xchoices*`环境
+- 增加环境上下方间距控制
 
 #### Changed
 - 当`label-pos`为`right`系列时，修改label样式为形如".A"
+- `xchoice`环境更名为`xchoices`环境
+
+#### Removed
+- 移除`\xchoices`命令，只保留`xchoices`环境
 
 #### Fixed
 - 修复`xchoice`环境的垂直位移偏差bug

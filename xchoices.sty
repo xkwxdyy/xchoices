@@ -1,6 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}[2018/04/01]
 \RequirePackage{expl3}
-\ProvidesExplPackage {xchoices} {2022-01-29} {0.0.1}
+\ProvidesExplPackage {xchoices} {2022-01-30} {0.0.2}
   {
     A package for flexibly LaTeXing choice items based on hlist environment and coffin.
     Kangwei Xia
@@ -149,11 +149,17 @@
       { \__xchoices_hlist_label_style_set:n {#1} },
     label-style .initial:n = Alph,
     % 两行之间的额外间距
-    vsep .dim_set:N = \l__xchocies_hlist_vsep_dim,
-    vsep .initial:n = 0pt,
+    v-sep .dim_set:N = \l__xchocies_hlist_vsep_dim,
+    v-sep .initial:n = 0pt,
     % 两列之间的额外间距
-    hsep .dim_set:N = \l__xchocies_hlist_hsep_dim,
-    hsep .initial:n = 0pt,
+    h-sep .dim_set:N = \l__xchocies_hlist_hsep_dim,
+    h-sep .initial:n = 0pt,
+    % xchoices环境与上方的距离
+    top .dim_set:N = \l__xchoices_env_top_distance_dim,
+    top .initial:n = 0pt,
+    % xchoices环境与下方的距离
+    bottom .dim_set:N = \l__xchoices_env_bottom_distance_dim,
+    bottom .initial:n = 1em,
     % 是否显示答案
     showanswer .bool_set:N = \__xchoices_env_show_answer_bool,
     showanswer .default:n = true,
@@ -164,18 +170,18 @@
     % “参考答案”label的颜色
     answer-label-color .tl_set:N = \l__xchoices_env_answer_label_color_tl,
     answer-label-color .initial:n = violet,
-    % 是否显示解析
-    showanalysis .bool_set:N = \l__xchoices_env_show_analysis_bool,
-    showanalysis .default:n = true,
-    showanalysis .initial:n = false,
-    % “解析”label的颜色
-    analysis-label-color .tl_set:N = \l__xchoices_env_analysis_label_color_tl,
-    analysis-label-color .initial:n = violet,
-    % “解析”label的内容
-    analysis-label-conent .tl_set:N = \l__xchoices_env_analysis_label_content_tl,
-    analysis-label-conent .initial:n = {【解析】},
-    % 解析的内容
-    analysis-content .tl_set:N = \l__xchoices_answer_analysis_content_tl,
+    % % 是否显示解析
+    % showanalysis .bool_set:N = \l__xchoices_env_show_analysis_bool,
+    % showanalysis .default:n = true,
+    % showanalysis .initial:n = false,
+    % % “解析”label的颜色
+    % analysis-label-color .tl_set:N = \l__xchoices_env_analysis_label_color_tl,
+    % analysis-label-color .initial:n = violet,
+    % % “解析”label的内容
+    % analysis-label-conent .tl_set:N = \l__xchoices_env_analysis_label_content_tl,
+    % analysis-label-conent .initial:n = {【解析】},
+    % % 解析的内容
+    % analysis-content .tl_set:N = \l__xchoices_answer_analysis_content_tl,
     unknown .code:n = { \msg_error:nnn { xchoices } { unknown-option } {#1} }
   }
 
@@ -226,6 +232,11 @@
     label-style .code:n = 
       { \__xchoices_coffin_label_style_set:n {#1} },
     label-style .initial:n = Alph,
+    % label前面的内容
+    pre-label .tl_set:N = \l__xchoices_prelabel_tl,
+    % label后面的内容
+    post-label .tl_set:N = \l__xchoices_postlabel_tl,
+    post-label .initial:n = {.},
     % label的垂直偏移量
     label-vsep .dim_set:N = \l__xchoices_coffin_join_vertical_sep_dim,
     label-vsep .initial:n = 0pt,
@@ -234,38 +245,66 @@
     label-hsep .initial:n = 0pt,
     % 每行多少个
     items .int_set:N = \l__xchoices_items_per_line_int,
+    % 两行之间的额外间距
+    v-sep .dim_set:N = \l__xchoices_coffin_hlist_vsep_dim,
+    v-sep .initial:n = 0pt,
+    % 两列之间的额外间距
+    h-sep .dim_set:N = \l__xchoices_coffin_hlist_hsep_dim,
+    h-sep .initial:n = 0pt,
+    % 是否显示答案
+    showanswer .bool_set:N = \__xchoices_env_show_answer_bool,
+    showanswer .default:n = true,
+    showanswer .initial:n = false,
+    % “参考答案”label的内容
+    answer-label-content .tl_set:N = \l__xchoices_env_answer_label_content_tl,
+    answer-label-content .initial:n = {【参考答案】},
+    % “参考答案”label的颜色
+    answer-label-color .tl_set:N = \l__xchoices_env_answer_label_color_tl,
+    answer-label-color .initial:n = violet,
+    % 整体的水平偏移
+    h-offset .dim_set:N = \l__xchoices_coffin_typeset_horizontal_transform_dim,
+    % 整体的垂直偏移
+    v-offset .dim_set:N = \l__xchoices_coffin_typeset_vertical_transform_dim,
+    % xchoices*环境与上方的距离
+    top .dim_set:N = \l__xchoices_env_top_distance_dim,
+    top .initial:n = 0pt,
+    % xchoices*环境与下方的距离
+    bottom .dim_set:N = \l__xchoices_env_bottom_distance_dim,
+    bottom .initial:n = 1em,
+    unknown .code:n = { \msg_error:nnn { xchoices } { unknown-option } {#1} }
   }
-\NewDocumentCommand { \xchoices } { s O{} +m }
-  {
-    \group_begin:
-      % 数据预处理
-      \IfBooleanTF{#1}
-        {
-          \__xchoices_with_ampersand_output:nN {#3} \l__xchoices_items_seq
-          % 键值放在这是因为用户手动设置的per line的items数要覆盖前面自动计算的
-          \keys_set:nn { xchoices / coffinchoices } {#2}
-          % 用coffin来排版
-          \__xchoices_coffin_output:NNN
-            \l__xchoices_items_seq
-            \l__xchoices_items_per_line_int
-            \l__xchoices_items_number_int
-        }
-        {
-          \__xchoices_with_ampersand_output:nN {#3} \l__xchoices_items_seq
-          % 键值放在这是因为用户手动设置的per line的items数要覆盖前面自动计算的
-          \keys_set:nn { xchoices / hlistchoices } {#2}
-          % 用hlist环境排版
-          \__xchoices_hlist_output:NNNNN
-            \l__xchoices_items_seq
-            \l__xchoices_items_per_line_int
-            \l__xchoices_prelabel_tl
-            \l__xchoices_hlist_label_style_tl
-            \l__xchoices_postlabel_tl
-        }
-    \group_end:
-  }
+% \NewDocumentCommand { \xchoices } { s O{} +m }
+%   {
+%     \group_begin:
+%       % 数据预处理
+%       \IfBooleanTF{#1}
+%         {
+%           \__xchoices_with_ampersand_output:nN {#3} \l__xchoices_items_seq
+%           % 键值放在这是因为用户手动设置的per line的items数要覆盖前面自动计算的
+%           \keys_set:nn { xchoices / coffinchoices } {#2}
+%           % 用coffin来排版
+%           \__xchoices_coffin_output:NNN
+%             \l__xchoices_items_seq
+%             \l__xchoices_items_per_line_int
+%             \l__xchoices_items_number_int
+%           \vspace*{1em}
+%         }
+%         {
+%           \__xchoices_with_ampersand_output:nN {#3} \l__xchoices_items_seq
+%           % 键值放在这是因为用户手动设置的per line的items数要覆盖前面自动计算的
+%           \keys_set:nn { xchoices / hlistchoices } {#2}
+%           % 用hlist环境排版
+%           \__xchoices_hlist_output:NNNNN
+%             \l__xchoices_items_seq
+%             \l__xchoices_items_per_line_int
+%             \l__xchoices_prelabel_tl
+%             \l__xchoices_hlist_label_style_tl
+%             \l__xchoices_postlabel_tl
+%         }
+%     \group_end:
+%   }
 % coffin版本的输出
-\cs_new:Npn \__xchoices_coffin_output:NNN #1#2#3
+\cs_new:Npn \__xchoices_coffin_input:NNN #1#2#3
   {
     % 新声明coffinchoices的label和content的coffin（个数？\l__xchoices_items_number_int）
     % 此时要先处理label再存（pre-label、样式、post-label）
@@ -276,13 +315,6 @@
       #3 #1
       % \l__xchoices_items_number_int
       % \l__xchoices_items_seq
-    % 根据当前的label-pos（采用text-figure类似的上下左右）决定如何join
-    \__xchoices_coffin_join:N #3
-      % \l__xchoices_items_number_int
-    % 把coffin给type出来
-    \__xchoices_coffin_typeset:NN #2 #3
-      \l__xchoices_items_per_line_int
-      \l__xchoices_items_number_int
   }
 %$ 声明coffin以及处理label样式
 \cs_new:Npn \__xchoices_coffin_new:N #1
@@ -430,7 +462,7 @@
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
               {1} { 0.45 \linewidth }
-              {2} { 0.22 \linewidth }
+              {2} { 0.18 \linewidth }
               {3} { 0.12 \linewidth }
               {4} { 0.09 \linewidth }
             }
@@ -802,9 +834,9 @@
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
               {1} { 0 \linewidth }
-              {2} { 0 \linewidth }
-              {3} { 0 \linewidth }
-              {4} { 0 \linewidth }
+              {2} { 0.05 \linewidth }
+              {3} { 0.07 \linewidth }
+              {4} { 0.03 \linewidth }
             }
             { 0.05 \linewidth }
           }
@@ -855,9 +887,9 @@
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
               {1} { 0 \linewidth }
-              {2} { 0 \linewidth }
-              {3} { 0 \linewidth }
-              {4} { 0 \linewidth }
+              {2} { 0.05 \linewidth }
+              {3} { 0.07 \linewidth }
+              {4} { 0.03 \linewidth }
             }
             { 0.05 \linewidth }
           }
@@ -1495,6 +1527,7 @@
   {
     \bool_if:NT \__xchoices_env_show_answer_bool
       {
+        \vspace*{1em}
         \noindent
         \textcolor
           { \tl_use:N \l__xchoices_env_answer_label_color_tl}
@@ -1507,6 +1540,7 @@
         % 三个{} 内依次是：只有两个的之间的、超过两个时前面几个之间的、超过两个时最后两个直接的
         % \seq_use:Nnnn #1 { ~and~ } { ,~ } { ,~and~ }
         \seq_use:Nnnn #1 { ,~ } { ,~ } { ,~ }
+        \par
       }
   }
 \seq_new:N \l__xchoices_tmpa_seq   % 临时变量
@@ -1543,22 +1577,23 @@
   }
 
 
-\cs_new:Nn \__xchoices_env_analysis_out: 
-  {
-    \bool_if:NTF \l__xchoices_env_show_analysis_bool
-      {
-        \par \noindent
-        \textcolor
-          { \tl_use:N \l__xchoices_env_analysis_label_color_tl }
-          { \tl_use:N \l__xchoices_env_analysis_label_content_tl }
-        \par \tl_use:N \l__xchoices_answer_analysis_content_tl
-      }
-      {}
-  }
+% \cs_new:Nn \__xchoices_env_analysis_out: 
+%   {
+%     \bool_if:NTF \l__xchoices_env_show_analysis_bool
+%       {
+%         \par \noindent
+%         \textcolor
+%           { \tl_use:N \l__xchoices_env_analysis_label_color_tl }
+%           { \tl_use:N \l__xchoices_env_analysis_label_content_tl }
+%         \par \tl_use:N \l__xchoices_answer_analysis_content_tl
+%       }
+%       {}
+%   }
 
-\NewDocumentEnvironment { xchoice } { O{} }
+\NewDocumentEnvironment { xchoices } { O{} }
   {
     \group_begin:
+      \vspace*{ \l__xchoices_env_top_distance_dim }
       \int_zero:N \l__xchoices_env_xitem_int   % 先将xitem计数器设置为0
       \tl_clear:N \l__xchoices_answer_analysis_content_tl
   }
@@ -1577,13 +1612,13 @@
         \l__xchoices_postlabel_tl
       \__xchoices_env_show_correct_answer:N
         \l__xchoices_env_correct_items_number_seq
-      % 输出解析
-      \__xchoices_env_analysis_out: 
+      \vspace*{ \l__xchoices_env_bottom_distance_dim }
     \group_end:
   }
-\NewDocumentEnvironment { xchoice* } { O{} }
+\NewDocumentEnvironment { xchoices* } { O{} }
   {
     \group_begin:
+      \vspace*{ \l__xchoices_env_top_distance_dim }
       \int_zero:N \l__xchoices_env_xitem_int   % 先将xitem计数器设置为0
       \tl_clear:N \l__xchoices_answer_analysis_content_tl
   }
@@ -1594,17 +1629,23 @@
       \__xchoices_env_output_correct_items_number_to_seq:
       % \__xchoices_env_determine_show_answer:N \l__xchoices_items_number_int
       \keys_set:nn { xchoices / coffinchoices } {#1}
-      \__xchoices_coffin_output:NNN
+      \__xchoices_coffin_input:NNN
         \l__xchoices_env_items_seq
         \l__xchoices_items_per_line_int
         \l__xchoices_items_number_int
-        % \l__xchoices_prelabel_tl
-        % \l__xchoices_coffin_label_style_tl
-        % \l__xchoices_postlabel_tl
+      % 根据当前的label-pos（采用text-figure类似的上下左右）决定如何join
+      \__xchoices_coffin_join:N \l__xchoices_items_number_int
+      % 此处再放一个key-set是因为上一步join里面根据前一个的key-set的label-pos设置了v-sep和h-sep
+      % 第一个key-set无法干预v-sep和h-sep的设置
+      % 所以在此处再设置一个
+      \keys_set:nn { xchoices / coffinchoices } {#1}
+      % 把coffin给type出来
+      \__xchoices_coffin_typeset:NN
+        \l__xchoices_items_per_line_int
+        \l__xchoices_items_number_int
       \__xchoices_env_show_correct_answer:N
         \l__xchoices_env_correct_items_number_seq
-      % 输出解析
-      \__xchoices_env_analysis_out: 
+      \vspace*{ \l__xchoices_env_bottom_distance_dim }
     \group_end:
   }
 \NewDocumentCommand { \xitem } { s }
