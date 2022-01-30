@@ -134,62 +134,63 @@
           }
       }
   }
-% hlistchoices的键值
-\keys_define:nn { xchoices / hlistchoices }
-  {
-    % 每行排多少个（手动干预）
-    items .int_set:N = \l__xchoices_items_per_line_int,
-    % label前面的内容
-    pre-label .tl_set:N = \l__xchoices_prelabel_tl,
-    % label后面的内容
-    post-label .tl_set:N = \l__xchoices_postlabel_tl,
-    post-label .initial:n = {.},
-    % label的样式
-    label-style .code:n =
-      { \__xchoices_hlist_label_style_set:n {#1} },
-    label-style .initial:n = Alph,
-    % label的水平偏移量
-    label-hsep .dim_set:N = \l__xchoices_hlist_label_horizontal_sep_dim,
-    % 两行之间的额外间距
-    v-sep .dim_set:N = \l__xchocies_hlist_vsep_dim,
-    v-sep .initial:n = 0pt,
-    % 两列之间的额外间距
-    h-sep .dim_set:N = \l__xchocies_hlist_hsep_dim,
-    h-sep .initial:n = 0pt,
-    % xchoices环境与上方的距离
-    top .dim_set:N = \l__xchoices_env_top_distance_dim,
-    top .initial:n = 0pt,
-    % xchoices环境与下方的距离
-    bottom .dim_set:N = \l__xchoices_env_bottom_distance_dim,
-    bottom .initial:n = 1em,
-    % 是否显示答案
-    showanswer .bool_set:N = \__xchoices_env_show_answer_bool,
-    showanswer .default:n = true,
-    showanswer .initial:n = false,
-    % “参考答案”label的内容
-    answer-label-content .tl_set:N = \l__xchoices_env_answer_label_content_tl,
-    answer-label-content .initial:n = {【参考答案】},
-    % “参考答案”label的颜色
-    answer-label-color .tl_set:N = \l__xchoices_env_answer_label_color_tl,
-    answer-label-color .initial:n = violet,
-    %%% 与coffinchoices的键值统一 %%%
-    h-offset .code:n = ,
-    v-offset .code:n = ,
-    label-vsep .code:n = ,
-    % % 是否显示解析
-    % showanalysis .bool_set:N = \l__xchoices_env_show_analysis_bool,
-    % showanalysis .default:n = true,
-    % showanalysis .initial:n = false,
-    % % “解析”label的颜色
-    % analysis-label-color .tl_set:N = \l__xchoices_env_analysis_label_color_tl,
-    % analysis-label-color .initial:n = violet,
-    % % “解析”label的内容
-    % analysis-label-conent .tl_set:N = \l__xchoices_env_analysis_label_content_tl,
-    % analysis-label-conent .initial:n = {【解析】},
-    % % 解析的内容
-    % analysis-content .tl_set:N = \l__xchoices_answer_analysis_content_tl,
-    unknown .code:n = { \msg_error:nnn { xchoices } { unknown-option } {#1} }
-  }
+% % hlistchoices的键值
+% \keys_define:nn { xchoices / hlistchoices }
+%   {
+%     % 每行排多少个（手动干预）
+%     items .int_set:N = \l__xchoices_items_per_line_int,
+%     % label前面的内容
+%     pre-label .tl_set:N = \l__xchoices_prelabel_tl,
+%     % label后面的内容
+%     post-label .tl_set:N = \l__xchoices_postlabel_tl,
+%     post-label .initial:n = {.},
+%     % label的样式
+%     label-style .code:n =
+%       { \__xchoices_hlist_label_style_set:n {#1} },
+%     label-style .initial:n = Alph,
+%     % label的水平偏移量
+%     label-hsep .dim_set:N = \l__xchoices_hlist_label_horizontal_sep_dim,
+%     % 两行之间的额外间距
+%     v-sep .dim_set:N = \l__xchocies_hlist_vsep_dim,
+%     v-sep .initial:n = 0pt,
+%     % 两列之间的额外间距
+%     h-sep .dim_set:N = \l__xchocies_hlist_hsep_dim,
+%     h-sep .initial:n = 0pt,
+%     % xchoices环境与上方的距离
+%     top .dim_set:N = \l__xchoices_env_top_distance_dim,
+%     top .initial:n = 0pt,
+%     % xchoices环境与下方的距离
+%     bottom .dim_set:N = \l__xchoices_env_bottom_distance_dim,
+%     bottom .initial:n = 1em,
+%     % 是否显示答案
+%     showanswer .bool_set:N = \__xchoices_env_show_answer_bool,
+%     showanswer .default:n = true,
+%     showanswer .initial:n = false,
+%     % “参考答案”label的内容
+%     answer-label-content .tl_set:N = \l__xchoices_env_answer_label_content_tl,
+%     answer-label-content .initial:n = {【参考答案】},
+%     % “参考答案”label的颜色
+%     answer-label-color .tl_set:N = \l__xchoices_env_answer_label_color_tl,
+%     answer-label-color .initial:n = violet,
+%     %%% 与coffinchoices的键值统一 %%%
+%     h-offset .code:n = ,
+%     v-offset .code:n = ,
+%     label-vsep .code:n = ,
+%     label-pos .code:n = ,
+%     % % 是否显示解析
+%     % showanalysis .bool_set:N = \l__xchoices_env_show_analysis_bool,
+%     % showanalysis .default:n = true,
+%     % showanalysis .initial:n = false,
+%     % % “解析”label的颜色
+%     % analysis-label-color .tl_set:N = \l__xchoices_env_analysis_label_color_tl,
+%     % analysis-label-color .initial:n = violet,
+%     % % “解析”label的内容
+%     % analysis-label-conent .tl_set:N = \l__xchoices_env_analysis_label_content_tl,
+%     % analysis-label-conent .initial:n = {【解析】},
+%     % % 解析的内容
+%     % analysis-content .tl_set:N = \l__xchoices_answer_analysis_content_tl,
+%     unknown .code:n = { \msg_error:nnn { xchoices } { unknown-option } {#1} }
+%   }
 
 \cs_new:Npn \__xchoices_coffin_label_style_set:n #1
   {
@@ -233,7 +234,7 @@
             \tl_set:Nn \l__xchoices_postlabel_tl {}
           }
       },
-    label-pos .initial:n = bottom,
+    label-pos .initial:n = left,
     % label样式
     label-style .code:n = 
       { \__xchoices_coffin_label_style_set:n {#1} },
@@ -1498,6 +1499,13 @@
         \box_move_up:nn {1pt}
           { \box_use:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box } }
       }
+    % \tl_set:N \l_tmpa_tl 
+    %   { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box  }
+    % 检测是否有插图命令
+    % \__xchoices_env_check_if_figure:NN 
+      % \l_tmpa_tl
+      % \l__xchoices_coffin_if_add_figure_bool
+    % \tl_use:N \l_tmpa_tl
   }
 % 用来储存正确items的项数
 \cs_new:Nn \__xchoices_env_output_correct_items_number_to_seq:
@@ -1596,49 +1604,75 @@
 %       }
 %       {}
 %   }
-
+\cs_new:Nn \item:
+  {
+    \peek_meaning_remove:NTF *
+      { \__xchoices_env_xitem_new_correct: }
+      { \__xchoices_env_xitem_new: }
+  }
+\cs_set_eq:NN \item \item:
+% \NewDocumentEnvironment { xchoices } { O{} }
+%   {
+%     \group_begin:
+%       \vspace*{ \l__xchoices_env_top_distance_dim }
+%       \int_zero:N \l__xchoices_env_xitem_int   % 先将xitem计数器设置为0
+%       \tl_clear:N \l__xchoices_answer_analysis_content_tl
+%   }
+%   {
+%       \__xchoices_env_xitem_out:
+%       \__xchoices_handle_seq_after_check:N
+%         \l__xchoices_env_items_seq
+%       \__xchoices_env_output_correct_items_number_to_seq:
+%       % \__xchoices_env_determine_show_answer:N \l__xchoices_items_number_int
+%       \keys_set:nn { xchoices / hlistchoices } {#1}
+%       \__xchoices_hlist_output:NNNNN
+%         \l__xchoices_env_items_seq
+%         \l__xchoices_items_per_line_int
+%         \l__xchoices_prelabel_tl
+%         \l__xchoices_hlist_label_style_tl
+%         \l__xchoices_postlabel_tl
+%       \__xchoices_env_show_correct_answer:N
+%         \l__xchoices_env_correct_items_number_seq
+%       \vspace*{ \l__xchoices_env_bottom_distance_dim }
+%     \group_end:
+%   }
+% 查看是否有插图命令
+\cs_new:Npn \__xchoices_env_check_if_figure:NN #1#2
+  {
+    \str_if_in:NnTF #1
+      { includegraphics }
+      { \bool_set_true:N #2 }
+      { 
+        \str_if_in:NnTF #1
+          { includesvg }
+          { \bool_set_true:N #2 }
+          { \bool_set_false:N #2 }
+      }
+  }
+\tl_new:N \l__xchoices_env_check_figure_tl
 \NewDocumentEnvironment { xchoices } { O{} }
   {
     \group_begin:
-      % \cs_set_eq:NN \item \__xchoices_env_xitem_new:
-      % \cs_set_eq:cN {item*}
-      % \__xchoices_env_xitem_new_correct:
       \vspace*{ \l__xchoices_env_top_distance_dim }
       \int_zero:N \l__xchoices_env_xitem_int   % 先将xitem计数器设置为0
       \tl_clear:N \l__xchoices_answer_analysis_content_tl
   }
   {
       \__xchoices_env_xitem_out:
+      % 根据宽度获取每行排版个数
       \__xchoices_handle_seq_after_check:N
         \l__xchoices_env_items_seq
-      \__xchoices_env_output_correct_items_number_to_seq:
-      % \__xchoices_env_determine_show_answer:N \l__xchoices_items_number_int
-      \keys_set:nn { xchoices / hlistchoices } {#1}
-      \__xchoices_hlist_output:NNNNN
-        \l__xchoices_env_items_seq
-        \l__xchoices_items_per_line_int
-        \l__xchoices_prelabel_tl
-        \l__xchoices_hlist_label_style_tl
-        \l__xchoices_postlabel_tl
-      \__xchoices_env_show_correct_answer:N
-        \l__xchoices_env_correct_items_number_seq
-      \vspace*{ \l__xchoices_env_bottom_distance_dim }
-    \group_end:
-  }
-\NewDocumentEnvironment { xchoices* } { O{} }
-  {
-    \group_begin:
-      \vspace*{ \l__xchoices_env_top_distance_dim }
-      \int_zero:N \l__xchoices_env_xitem_int   % 先将xitem计数器设置为0
-      \tl_clear:N \l__xchoices_answer_analysis_content_tl
-  }
-  {
-      \__xchoices_env_xitem_out:
-      \__xchoices_handle_seq_after_check:N
-        \l__xchoices_env_items_seq
+      % \tl_set:Nn \l__xchoices_env_check_figure_tl {#2}
+      % \tl_use:N \l__xchoices_env_check_figure_tl
+      % 检测是否有插图命令
+      % \__xchoices_env_check_if_figure:NN 
+      %   \l__xchoices_env_check_figure_tl
+      %   \l__xchoices_coffin_if_add_figure_bool
+      % 将正确答案进行储存输出
       \__xchoices_env_output_correct_items_number_to_seq:
       % \__xchoices_env_determine_show_answer:N \l__xchoices_items_number_int
       \keys_set:nn { xchoices / coffinchoices } {#1}
+      % 新声明coffin并且进行内容的储存
       \__xchoices_coffin_input:NNN
         \l__xchoices_env_items_seq
         \l__xchoices_items_per_line_int
@@ -1658,15 +1692,15 @@
       \vspace*{ \l__xchoices_env_bottom_distance_dim }
     \group_end:
   }
-\NewDocumentCommand { \xitem } { s }
-  {
-    \IfBooleanTF{#1}
-      { \__xchoices_env_xitem_new_correct: }
-      { \__xchoices_env_xitem_new: }
-  }
+% \NewDocumentCommand { \xitem } { s }
+%   {
+%     \IfBooleanTF{#1}
+%       { \__xchoices_env_xitem_new_correct: }
+%       { \__xchoices_env_xitem_new: }
+%   }
 \NewDocumentCommand{ \xchoicesetup }{ m }
   {
-    \keys_set:nn { xchoices / hlistchoices } {#1}
+    \keys_set:nn { xchoices / coffinchoices } {#1}
   }
 % 带圈数字
 \NewDocumentCommand{ \quan }{ m }

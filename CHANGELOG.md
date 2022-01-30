@@ -18,10 +18,12 @@
 #### Changed
 - 当`label-pos`为`right`系列时，修改label样式为形如".A"
 - `xchoice`环境更名为`xchoices`环境
+- 修改`\xitem`为`\item`
 
 #### Removed
 - 移除`\xchoices`命令，只保留`xchoices`环境（[#I4SKCL](https://gitee.com/xkwxdyy/xchoices/issues/I4SKCL)）
 - 去掉环境的“解析”接口
+- 合并`xchoices`环境和`xchoices*`环境为`xchoices`环境
 
 #### Fixed
 - 修复`xchoice`环境的垂直位移偏差bug
