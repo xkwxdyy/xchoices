@@ -37,6 +37,7 @@ Author: Kangwei Xia <kangweixia_xdyy@163.com>
   \item  错误选项
 \end{xchoices}
 ```
+![](https://raw.githubusercontent.com/xkwxdyy/image/main/postimage/image-hosting/20220131001850.png)
 
 - 增加和完善了一系列键值，目前有
   - items：每行排多少个，系统会根据选项宽度自动计算合适值，可用此键值手动干预
