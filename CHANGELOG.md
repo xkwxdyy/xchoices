@@ -20,7 +20,7 @@
 - `xchoice`环境更名为`xchoices`环境
 
 #### Removed
-- 移除`\xchoices`命令，只保留`xchoices`环境
+- 移除`\xchoices`命令，只保留`xchoices`环境（[#I4SKCL](https://gitee.com/xkwxdyy/xchoices/issues/I4SKCL)）
 - 去掉环境的“解析”接口
 
 #### Fixed
