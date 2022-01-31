@@ -44,6 +44,7 @@ Author: Kangwei Xia <kangweixia_xdyy@163.com>
     - arabic：阿拉伯数字
     - roman：小写罗马数字
     - Roman：大写罗马数字
+    - chinese：中文数字
     - quan：带圈数字
     - alph：小写英文字母
     - Alph：大写英文字母

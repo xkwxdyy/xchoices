@@ -1394,14 +1394,18 @@
     \str_if_eq:VnTF \l__xchoices_current_label_style_str {none}
       {}
       {
-        \str_if_eq:VnTF \l__xchoices_current_label_style_str {quan}
-          { \quan{#1} }
+        \str_if_eq:VnTF \l__xchoices_current_label_style_str {chinese}
+          { \zhnumber{#1} }
           {
-            \str_if_eq:VnTF \l__xchoices_current_label_style_str {arabic}
-              {#1}
-              {
-                \use:c { int_to_ \l__xchoices_current_label_style_str :n }{#1}
-              }
+            \str_if_eq:VnTF \l__xchoices_current_label_style_str {quan}
+            { \quan{#1} }
+            {
+              \str_if_eq:VnTF \l__xchoices_current_label_style_str {arabic}
+                {#1}
+                {
+                  \use:c { int_to_ \l__xchoices_current_label_style_str :n }{#1}
+                }
+            }
           }
       }
   }

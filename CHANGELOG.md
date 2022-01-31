@@ -8,6 +8,8 @@
 - 保持答案正常的乱序功能
 
 ## [v0.0.3] - 2022-01-31
+### Added
+- 增加`label-style`的chinese值
 ### Changed
 - 完善a4paper下的`label-pos`参数
 
