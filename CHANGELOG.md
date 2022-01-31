@@ -11,6 +11,9 @@
 ### Changed
 - 完善a4paper下的`label-pos`参数
 
+### Fixed
+- 修复`\item`与`enumerate`环境冲突bug
+
 ## [v0.0.2] - 2022-01-30
 ### Added
 - 基本完成`coffinchoice`命令的重写
