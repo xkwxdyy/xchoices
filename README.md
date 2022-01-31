@@ -10,10 +10,9 @@ Author: Kangwei Xia <kangweixia_xdyy@163.com>
 
 ## 宏包说明
 
-本宏包为本人前段时间编写的宏包`choices`的重新推翻编写的版本，并增加了许多功能：
+本宏包为本人前段时间编写的宏包`choices`的重新推翻编写的版本，并增添完善了许多功能
 （choices宏包仓库：[github](https://github.com/xkwxdyy/xchoices), [gitee](https://gitee.com/xkwxdyy/xchoices)）
 
-目前宏包还处于开发测试阶段，接口以及功能等随时可能会进行更改。
 
 ### 变更
 - `choices`宏包更名为`xchoices`宏包，`x`寓意为`etra`，可以避免与`exam.cls`冲突，并能同时使用

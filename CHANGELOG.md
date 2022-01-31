@@ -1,5 +1,5 @@
-## 更新日志
-### [Unrelease]
+# 更新日志
+## [Unrelease]
 - `\__xchoices_env_determine_show_answer:N`函数，如何实现
 ```tex
 \bool_if:NT \__xchoices_env_show_answer_bool
@@ -7,30 +7,30 @@
 ```
 - 保持答案正常的乱序功能
 
-### [v0.0.2] - 2022-01-30
-#### Added
+## [v0.0.2] - 2022-01-30
+### Added
 - 基本完成`coffinchoice`命令的重写
 - 增加插图判断
 - 完善`coffinchoice`不同方位的细节调整
 - 增加基于coffin的`xchoices*`环境
 - 增加环境上下方间距控制
 
-#### Changed
+### Changed
 - 当`label-pos`为`right`系列时，修改label样式为形如".A"
 - `xchoice`环境更名为`xchoices`环境
 - 修改`\xitem`为`\item`
 
-#### Removed
+### Removed
 - 移除`\xchoices`命令，只保留`xchoices`环境（[#I4SKCL](https://gitee.com/xkwxdyy/xchoices/issues/I4SKCL)）
 - 去掉环境的“解析”接口
 - 合并`xchoices`环境和`xchoices*`环境为`xchoices`环境
 
-#### Fixed
+### Fixed
 - 修复`xchoice`环境的垂直位移偏差bug
 
-### [v0.0.1] - 2022-01-29
+## [v0.0.1] - 2022-01-29
 
-#### Added
+### Added
 
 - 新建仓库，增加`CHANGELOG.md`和`xchoices.sty`
 - 完成`xchoice`环境的编写
@@ -40,7 +40,7 @@
 - 完成答案显示与解析控制
 - 增加选择题括号命令`\paren`
 
-#### Changed
+### Changed
 - 重新修订`README.md`文件
 
 ## 仓库地址

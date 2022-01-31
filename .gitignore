@@ -14,6 +14,7 @@ xchoices-test.pdf
 .*.lb
 *.hd
 *.zip
+*.tmp
 
 ## Intermediate documents:
 *.dvi
