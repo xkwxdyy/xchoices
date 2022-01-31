@@ -277,7 +277,18 @@
     top .initial:n = 0pt,
     % xchoices*环境与下方的距离
     bottom .dim_set:N = \l__xchoices_env_bottom_distance_dim,
-    bottom .initial:n = 1em,
+    bottom .initial:n = 0em,
+    % 文本模式还是图片模式（偏移量不同）
+    mode .choice:,
+    mode / text .code:n = 
+      {
+        \bool_set_false:N \l__xchoices_coffin_if_add_figure_bool
+      },
+    mode / figure .code:n =
+      {
+        \bool_set_true:N \l__xchoices_coffin_if_add_figure_bool
+      },
+    mode .initial:n = text,
     unknown .code:n = { \msg_error:nnn { xchoices } { unknown-option } {#1} }
   }
 % \NewDocumentCommand { \xchoices } { s O{} +m }
@@ -427,59 +438,8 @@
           { 0em }
       }
   }
-\cs_new:cpn { __xchoices_label_pos_set_top:NN } #1#2
-  {
-    \coffin_join:NnnNnnnn
-      #1 { b } { hc }
-      #2 { t } { hc }
-      { \l__xchoices_coffin_join_horizontal_sep_dim }
-      { -0.5em + \l__xchoices_coffin_join_vertical_sep_dim }
-    % typeset的水平pole
-    \tl_set:Nn \l__xchoices_coffin_typeset_horizontal_position_tl { hc }
-    % typeset的垂直pole
-    \tl_set:Nn \l__xchoices_coffin_typeset_verticle_position_tl { t }
-    \bool_if:NTF \l__xchoices_coffin_if_add_figure_bool
-      {
-        %%% 有图版本 %%%
-        % 两行之间的垂直偏移量
-        \dim_set:Nn \l__xchoices_coffin_hlist_vsep_dim { 0.5em }
-        % typeset的水平偏移
-        \dim_set:Nn \l__xchoices_coffin_typeset_horizontal_transform_dim 
-          {
-            \int_case:nnF { \l__xchoices_items_per_line_int }
-            {
-              {1} { 0.45 \linewidth }
-              {2} { 0.2 \linewidth }
-              {3} { 0.1 \linewidth }
-              {4} { 0.1 \linewidth }
-            }
-            { 0.05 \linewidth }
-          }
-        % typeset的垂直偏移
-        \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
-          { 0em }
-      }
-      {
-        %%% 无图版本 %%%
-        % 两行之间的垂直偏移量
-        \dim_set:Nn \l__xchoices_coffin_hlist_vsep_dim { 0.5em }
-        % typeset的水平偏移
-        \dim_set:Nn \l__xchoices_coffin_typeset_horizontal_transform_dim 
-          {
-            \int_case:nnF { \l__xchoices_items_per_line_int }
-            {
-              {1} { 0.45 \linewidth }
-              {2} { 0.18 \linewidth }
-              {3} { 0.12 \linewidth }
-              {4} { 0.09 \linewidth }
-            }
-            { 0.05 \linewidth }
-          }
-        % typeset的垂直偏移
-        \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
-          { 0em }
-      }
-  }
+\cs_set_eq:cc { __xchoices_label_pos_set_top:NN } 
+{ __xchoices_label_pos_set_top-center:NN }
 \cs_new:cpn { __xchoices_label_pos_set_top-left:NN } #1#2
   {
     \coffin_join:NnnNnnnn
@@ -501,12 +461,12 @@
           {
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
-              {1} { 0.36 \linewidth }
-              {2} { 0.16 \linewidth }
-              {3} { 0.07 \linewidth }
-              {4} { 0.05 \linewidth }
+              {1} { 0 \linewidth }
+              {2} { 0.12 \linewidth }
+              {3} { 0.02 \linewidth }
+              {4} { 0.01 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
@@ -521,12 +481,12 @@
           {
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
-              {1} { 0.42 \linewidth }
-              {2} { 0.15 \linewidth }
-              {3} { 0.1 \linewidth }
-              {4} { 0.05 \linewidth }
+              {1} { 0 \linewidth }
+              {2} { 0 \linewidth }
+              {3} { 0 \linewidth }
+              {4} { 0 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
@@ -555,12 +515,12 @@
           {
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
-              {1} { 0.6 \linewidth }
+              {1} { 0.9 \linewidth }
               {2} { 0.3 \linewidth }
               {3} { 0.18 \linewidth }
               {4} { 0.16 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0.1 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
@@ -575,12 +535,12 @@
           {
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
-              {1} { 0.5 \linewidth }
-              {2} { 0.2 \linewidth }
-              {3} { 0.15 \linewidth }
-              {4} { 0.1 \linewidth }
+              {1} { 0.95 \linewidth }
+              {2} { 0.45 \linewidth }
+              {3} { 0.28 \linewidth }
+              {4} { 0.2 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0.1 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
@@ -640,59 +600,8 @@
           { 0em }
       }
   }
-\cs_new:cpn { __xchoices_label_pos_set_bottom-center:NN } #1#2
-  {
-    \coffin_join:NnnNnnnn
-      #1 { t } { hc }
-      #2 { b } { hc }
-      { \l__xchoices_coffin_join_horizontal_sep_dim }
-      { \l__xchoices_coffin_join_vertical_sep_dim }
-    % typeset的水平pole
-    \tl_set:Nn \l__xchoices_coffin_typeset_horizontal_position_tl { hc }
-    % typeset的垂直pole
-    \tl_set:Nn \l__xchoices_coffin_typeset_verticle_position_tl { b }
-    \bool_if:NTF \l__xchoices_coffin_if_add_figure_bool
-      {
-        %%% 有图版本 %%%
-        % 两行之间的垂直偏移量
-        \dim_set:Nn \l__xchoices_coffin_hlist_vsep_dim { 0.5em }
-        % typeset的水平偏移
-        \dim_set:Nn \l__xchoices_coffin_typeset_horizontal_transform_dim 
-          {
-            \int_case:nnF { \l__xchoices_items_per_line_int }
-            {
-              {1} { 0.45 \linewidth }
-              {2} { 0.2 \linewidth }
-              {3} { 0.1 \linewidth }
-              {4} { 0.1 \linewidth }
-            }
-            { 0.05 \linewidth }
-          }
-        % typeset的垂直偏移
-        \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
-          { 0em }
-      }
-      {
-        %%% 无图版本 %%%
-        % 两行之间的垂直偏移量
-        \dim_set:Nn \l__xchoices_coffin_hlist_vsep_dim { 0.5em }
-        % typeset的水平偏移
-        \dim_set:Nn \l__xchoices_coffin_typeset_horizontal_transform_dim 
-          {
-            \int_case:nnF { \l__xchoices_items_per_line_int }
-            {
-              {1} { 0.45 \linewidth }
-              {2} { 0.22 \linewidth }
-              {3} { 0.12 \linewidth }
-              {4} { 0.09 \linewidth }
-            }
-            { 0.05 \linewidth }
-          }
-        % typeset的垂直偏移
-        \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
-          { 0em }
-      }
-  }
+\cs_set_eq:cc { __xchoices_label_pos_set_bottom-center:NN } 
+  { __xchoices_label_pos_set_bottom:NN }
 \cs_new:cpn { __xchoices_label_pos_set_bottom-left:NN } #1#2
   {
     \coffin_join:NnnNnnnn
@@ -714,12 +623,12 @@
           {
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
-              {1} { 0.35 \linewidth }
-              {2} { 0.15 \linewidth }
-              {3} { 0.04 \linewidth }
-              {4} { 0.04 \linewidth }
+              {1} { 0 \linewidth }
+              {2} { 0.1 \linewidth }
+              {3} { 0.02 \linewidth }
+              {4} { 0 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
@@ -735,11 +644,11 @@
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
               {1} { 0 \linewidth }
-              {2} { 0.15 \linewidth }
-              {3} { 0.07 \linewidth }
-              {4} { 0.03 \linewidth }
+              {2} { 0 \linewidth }
+              {3} { 0 \linewidth }
+              {4} { 0 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
@@ -767,12 +676,12 @@
           {
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
-              {1} { 0.6 \linewidth }
+              {1} { 0.9 \linewidth }
               {2} { 0.3 \linewidth }
               {3} { 0.18 \linewidth }
               {4} { 0.16 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0.1 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
@@ -787,12 +696,12 @@
           {
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
-              {1} { 0.85 \linewidth }
-              {2} { 0.25 \linewidth }
-              {3} { 0.2 \linewidth }
-              {4} { 0.15 \linewidth }
+              {1} { 0.9 \linewidth }
+              {2} { 0.4 \linewidth }
+              {3} { 0.3 \linewidth }
+              {4} { 0.2 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0.1 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
@@ -821,11 +730,11 @@
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
               {1} { 0 \linewidth }
-              {2} { 0.15 \linewidth }
-              {3} { 0.05 \linewidth }
-              {4} { 0.05 \linewidth }
+              {2} { 0.05 \linewidth }
+              {3} { 0.02 \linewidth }
+              {4} { 0 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
@@ -841,9 +750,9 @@
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
               {1} { 0 \linewidth }
-              {2} { 0.05 \linewidth }
-              {3} { 0.07 \linewidth }
-              {4} { 0.03 \linewidth }
+              {2} { 0 \linewidth }
+              {3} { 0 \linewidth }
+              {4} { 0 \linewidth }
             }
             { 0.05 \linewidth }
           }
@@ -852,59 +761,9 @@
           { 0em }
       }
   }
-\cs_new:cpn { __xchoices_label_pos_set_left-center:NN } #1#2
-  {
-    \coffin_join:NnnNnnnn
-      #1 { vc } { r }
-      #2 { vc } { l }
-      { \l__xchoices_coffin_join_horizontal_sep_dim }
-      { \l__xchoices_coffin_join_vertical_sep_dim }
-    % typeset的水平pole
-    \tl_set:Nn \l__xchoices_coffin_typeset_horizontal_position_tl { l }
-    % typeset的垂直pole
-    \tl_set:Nn \l__xchoices_coffin_typeset_verticle_position_tl { vc }
-    \bool_if:NTF \l__xchoices_coffin_if_add_figure_bool
-      {
-        %%% 有图版本 %%%
-        % 两行之间的垂直偏移量
-        \dim_set:Nn \l__xchoices_coffin_hlist_vsep_dim { 0.5em }
-        % typeset的水平偏移
-        \dim_set:Nn \l__xchoices_coffin_typeset_horizontal_transform_dim 
-          {
-            \int_case:nnF { \l__xchoices_items_per_line_int }
-            {
-              {1} { 0 \linewidth }
-              {2} { 0.15 \linewidth }
-              {3} { 0.05 \linewidth }
-              {4} { 0.05 \linewidth }
-            }
-            { 0.05 \linewidth }
-          }
-        % typeset的垂直偏移
-        \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
-          { 0em }
-      }
-      {
-        %%% 无图版本 %%%
-        % 两行之间的垂直偏移量
-        \dim_set:Nn \l__xchoices_coffin_hlist_vsep_dim { 0.5em }
-        % typeset的水平偏移
-        \dim_set:Nn \l__xchoices_coffin_typeset_horizontal_transform_dim 
-          {
-            \int_case:nnF { \l__xchoices_items_per_line_int }
-            {
-              {1} { 0 \linewidth }
-              {2} { 0.05 \linewidth }
-              {3} { 0.07 \linewidth }
-              {4} { 0.03 \linewidth }
-            }
-            { 0.05 \linewidth }
-          }
-        % typeset的垂直偏移
-        \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
-          { 0em }
-      }
-  }
+\cs_set_eq:cc 
+  { __xchoices_label_pos_set_left-center:NN } 
+  { __xchoices_label_pos_set_left:NN }
 \cs_new:cpn { __xchoices_label_pos_set_left-top:NN } #1#2
   {
     \coffin_join:NnnNnnnn
@@ -926,12 +785,12 @@
           {
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
-              {1} { 0.35 \linewidth }
-              {2} { 0.15 \linewidth }
-              {3} { 0.05 \linewidth }
-              {4} { 0.05 \linewidth }
+              {1} { 0 \linewidth }
+              {2} { 0.08 \linewidth }
+              {3} { 0 \linewidth }
+              {4} { 0 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
@@ -946,12 +805,12 @@
           {
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
-              {1} { 0.4 \linewidth }
-              {2} { 0.15 \linewidth }
-              {3} { 0.1 \linewidth }
-              {4} { 0.05 \linewidth }
+              {1} { 0 \linewidth }
+              {2} { 0 \linewidth }
+              {3} { 0 \linewidth }
+              {4} { 0 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
@@ -979,12 +838,12 @@
           {
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
-              {1} { 0.35 \linewidth }
-              {2} { 0.15 \linewidth }
-              {3} { 0.05 \linewidth }
-              {4} { 0.05 \linewidth }
+              {1} { 0 \linewidth }
+              {2} { 0.08 \linewidth }
+              {3} { 0 \linewidth }
+              {4} { 0 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
@@ -999,12 +858,12 @@
           {
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
-              {1} { 0.4 \linewidth }
-              {2} { 0.15 \linewidth }
-              {3} { 0.1 \linewidth }
-              {4} { 0.05 \linewidth }
+              {1} { 0 \linewidth }
+              {2} { 0 \linewidth }
+              {3} { 0 \linewidth }
+              {4} { 0 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
@@ -1032,12 +891,12 @@
           {
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
-              {1} { 0.8 \linewidth }
+              {1} { 0.9 \linewidth }
               {2} { 0.35 \linewidth }
-              {3} { 0.18 \linewidth }
-              {4} { 0.16 \linewidth }
+              {3} { 0.2 \linewidth }
+              {4} { 0.18 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0.1 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
@@ -1055,68 +914,18 @@
               {1} { 0.9 \linewidth }
               {2} { 0.4 \linewidth }
               {3} { 0.25 \linewidth }
-              {4} { 0.2 \linewidth }
+              {4} { 0.15 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0.08 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
           { 0em }
       }
   }
-\cs_new:cpn { __xchoices_label_pos_set_right-center:NN } #1#2
-  {
-    \coffin_join:NnnNnnnn
-      #1 { vc } { l }
-      #2 { vc } { r }
-      { -5pt+ \l__xchoices_coffin_join_horizontal_sep_dim }
-      { \l__xchoices_coffin_join_vertical_sep_dim }
-    % typeset的水平pole
-    \tl_set:Nn \l__xchoices_coffin_typeset_horizontal_position_tl { r }
-    % typeset的垂直pole
-    \tl_set:Nn \l__xchoices_coffin_typeset_verticle_position_tl { vc }
-    \bool_if:NTF \l__xchoices_coffin_if_add_figure_bool
-      {
-        %%% 有图版本 %%%
-        % 两行之间的垂直偏移量
-        \dim_set:Nn \l__xchoices_coffin_hlist_vsep_dim { 0.5em }
-        % typeset的水平偏移
-        \dim_set:Nn \l__xchoices_coffin_typeset_horizontal_transform_dim 
-          {
-            \int_case:nnF { \l__xchoices_items_per_line_int }
-            {
-              {1} { 0.8 \linewidth }
-              {2} { 0.35 \linewidth }
-              {3} { 0.18 \linewidth }
-              {4} { 0.16 \linewidth }
-            }
-            { 0.05 \linewidth }
-          }
-        % typeset的垂直偏移
-        \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
-          { 0em }
-      }
-      {
-        %%% 无图版本 %%%
-        % 两行之间的垂直偏移量
-        \dim_set:Nn \l__xchoices_coffin_hlist_vsep_dim { 0.5em }
-        % typeset的水平偏移
-        \dim_set:Nn \l__xchoices_coffin_typeset_horizontal_transform_dim 
-          {
-            \int_case:nnF { \l__xchoices_items_per_line_int }
-            {
-              {1} { 0.9 \linewidth }
-              {2} { 0.4 \linewidth }
-              {3} { 0.25 \linewidth }
-              {4} { 0.2 \linewidth }
-            }
-            { 0.05 \linewidth }
-          }
-        % typeset的垂直偏移
-        \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
-          { 0em }
-      }
-  }
+\cs_set_eq:cc 
+  { __xchoices_label_pos_set_right-center:NN } 
+  { __xchoices_label_pos_set_right:NN }
 \cs_new:cpn { __xchoices_label_pos_set_right-top:NN } #1#2
   {
     \coffin_join:NnnNnnnn
@@ -1138,12 +947,12 @@
           {
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
-              {1} { 0.8 \linewidth }
+              {1} { 0.9 \linewidth }
               {2} { 0.35 \linewidth }
-              {3} { 0.18 \linewidth }
-              {4} { 0.16 \linewidth }
+              {3} { 0.2 \linewidth }
+              {4} { 0.18 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0.1 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
@@ -1161,9 +970,9 @@
               {1} { 0.9 \linewidth }
               {2} { 0.4 \linewidth }
               {3} { 0.25 \linewidth }
-              {4} { 0.2 \linewidth }
+              {4} { 0.15 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0.1 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
@@ -1191,12 +1000,12 @@
           {
             \int_case:nnF { \l__xchoices_items_per_line_int }
             {
-              {1} { 0.8 \linewidth }
+              {1} { 0.9 \linewidth }
               {2} { 0.35 \linewidth }
-              {3} { 0.18 \linewidth }
-              {4} { 0.16 \linewidth }
+              {3} { 0.2 \linewidth }
+              {4} { 0.18 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0.1 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
@@ -1214,9 +1023,9 @@
               {1} { 0.9 \linewidth }
               {2} { 0.4 \linewidth }
               {3} { 0.25 \linewidth }
-              {4} { 0.2 \linewidth }
+              {4} { 0.15 \linewidth }
             }
-            { 0.05 \linewidth }
+            { 0.1 \linewidth }
           }
         % typeset的垂直偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_vertical_transform_dim 
@@ -1668,11 +1477,11 @@
           }
       }
   }
-\NewDocumentEnvironment { xchoices } { O{}}
+\NewDocumentEnvironment { xchoices } { O{} }
   {
     \group_begin:
       \vspace*{ \l__xchoices_env_top_distance_dim }
-      % \mode_leave_vertical:
+      \mode_leave_vertical:
       \int_zero:N \l__xchoices_env_xitem_int   % 先将xitem计数器设置为0
       \tl_clear:N \l__xchoices_answer_analysis_content_tl
       \bool_set_false:N \l__xchoices_coffin_if_add_figure_bool
