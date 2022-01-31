@@ -201,12 +201,19 @@
         \tl_set:Nn \l__xchoices_prelabel_tl {}
       }
       {
-        \str_if_eq:nnTF {#1} { quan }
+        \str_if_eq:nnTF {#1} {chinese}
           {
-            \tl_set:Nn \l__xchoices_postlabel_tl {}
+            \tl_set:Nn \l__xchoices_postlabel_tl {、}
             \tl_set:Nn \l__xchoices_prelabel_tl {}
           }
-          {}
+          {
+            \str_if_eq:nnTF {#1} { quan }
+              {
+                \tl_set:Nn \l__xchoices_postlabel_tl {}
+                \tl_set:Nn \l__xchoices_prelabel_tl {}
+              }
+              {}
+          }
       }
   }
 \keys_define:nn { xchoices / coffinchoices }

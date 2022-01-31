@@ -10,6 +10,8 @@
 ## [v0.0.3] - 2022-01-31
 ### Added
 - 增加`label-style`的chinese值
+- chinese的label-style时post-label设置为“、”
+
 ### Changed
 - 完善a4paper下的`label-pos`参数
 
