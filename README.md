@@ -49,12 +49,25 @@ Author: Kangwei Xia <kangweixia_xdyy@163.com>
     - alph：小写英文字母
     - Alph：大写英文字母
     - none：没有label
-  - label-vsep：label本身的垂直偏移（仅对`xchoices*`环境有效）
+  - label-pos：label相对于内容的位置
+    - top, top-center：正上方
+    - top-left：上左方
+    - top-right：上右方
+    - bottom, bottom-center：正下方
+    - bottom-left：下左方
+    - bottom-right：下右方
+    - left, left-center：正左方
+    - left-top：左上方
+    - left-bottom：左下方
+    - right, right-center：正左方
+    - right-top：左上方
+    - right-bottom：左下方
+  - label-vsep：label本身的垂直偏移
   - label-hsep：label本身的水平偏移
   - v-sep：两行选项之间的额外垂直偏移量（通过`\sethlist`接口实现）
   - h-sep：两列选项之间的额外垂直偏移量（通过`\sethlist`接口实现）
-  - v-offset：垂直的额外偏移（仅对`xchoices*`环境有效）
-  - h-offset：水平的整体偏移（仅对`xchoices*`环境有效）
+  - v-offset：垂直的额外偏移
+  - h-offset：水平的整体偏移
   - showanswer：控制答案显示
     - `showanswer`, `showanswer = true`表示显示答案
     - `showanswer = false`表示隐藏答案
