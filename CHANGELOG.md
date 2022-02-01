@@ -13,7 +13,7 @@
 ### Changed
 - 更新`README.md`的“宏包开发背景”内容
 ### Fixed
-- 修正`README.md`的示例代码问题
+- 修正`README.md`的示例代码和图片问题
 
 ## [v0.0.3] - 2022-01-31
 ### Added
