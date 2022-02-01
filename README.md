@@ -37,11 +37,11 @@ Author: Kangwei Xia <kangweixia_xdyy@163.com>
 - 统一所有选项排版命令为`xchoices`环境
 
 ### 新增
-- 新增了选择题的括号命令`\paren`，默认到该行行尾，内容多时自动到下一行行尾
+- 新增了选择题的括号命令`\xparen`，默认到该行行尾，内容多时自动到下一行行尾
 - 增加了代码风格类似于`list`环境的`xchoices`环境，用`\item`分隔每一项，使选项分隔结构更清晰
 - 基于`xchoices`环境下增加了答案的控制显示，`\item*`表示该项为正确答案，支持多选题。示例如下
 ```tex
-<题干内容>，下面正确的是\paren
+<题干内容>，下面正确的是\xparen
 \begin{xchoices}[
   showanswer = true,
   label-style = quan
