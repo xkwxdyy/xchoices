@@ -15,6 +15,7 @@
 ### Fixed
 - 修正`README.md`的示例代码和图片问题
 - 更改`\paren`名为`\xparen`
+- 更新示例文件`xchoices-test.tex`
 
 ## [v0.0.3] - 2022-01-31
 ### Added
