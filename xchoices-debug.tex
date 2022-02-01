@@ -1,56 +1,39 @@
-\documentclass{ctexart}
-
-\usepackage{expl3}
-\usepackage{xcoffins}
+\documentclass[twocolumn]{ctexart}
+% \documentclass{article}
+\usepackage[paperwidth = 30cm]{geometry}
+\usepackage{xchoices}
 \usepackage{lipsum}
 
 \begin{document}
+\begin{xchoices}
+  \item Lorem ipsum.
+  \item orem ipsum.
+\end{xchoices}
+\lipsum[1]
 
-\ExplSyntaxOn
-\coffin_new:N \l__a_coffin
-\coffin_new:N \l__b_coffin
-\coffin_new:N \l__tmp_coffin
-\box_new:N \l__a_box
-% \vbox_set:Nw \l__a_box
-% % \hbox_set:Nw \l__a_box
-%   \noindent 
-%   norem~ opsum \newline
-%   norem~ opsum
-% \vbox_set_end:
-\hcoffin_set:Nn \l__a_coffin
-  {
-    \vcoffin_set:Nnn \l__tmp_coffin { 6em }
-      {
-        \noindent 
-        \strut
-        norem~ opsum \newline
-        % 夏大鱼羊 \newline
-        Lorem~ ipsum 
-        % \box_use:N \l__a_box
-        \strut
-      }
-    % \coffin_mark_handle:Nnnn \l__tmp_coffin {r} {H} {red}
-    % \coffin_mark_handle:Nnnn \l__tmp_coffin {r} {T} {green}
-    % \coffin_mark_handle:Nnnn \l__tmp_coffin {r} {B} {blue}
-    \coffin_typeset:Nnnnn \l__tmp_coffin {l} {T} {0pt} {0pt}
-  }
-\hcoffin_set:Nn \l__b_coffin
-  {
-    \vcoffin_set:Nnn \l__tmp_coffin { 6em }
-      {
-        \noindent \strut
-        Lorem~ ipsum \newline
-        Lorem~ ipsum \strut
-      }
-    \coffin_typeset:Nnnnn \l__tmp_coffin {l} {T} {0pt} {0pt}
-  }
+\begin{enumerate}
+  \item Lorem ipsum.
+    \begin{xchoices}[label-hsep = 2mm]
+      \item Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+        Ut purus elit, vestibulum ut, placerat ac, adipiscing vitae, felis.
+      \item* Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+    \end{xchoices}
+  \item \begin{enumerate}
+    \item \begin{xchoices}
+      \item Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+        Ut purus elit, vestibulum ut, placerat ac, adipiscing vitae, felis.
+      \item Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+    \end{xchoices}
+  \end{enumerate}
+\end{enumerate}
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+        Ut purus elit, vestibulum ut, placerat ac, adipiscing vitae, felis.
+\begin{xchoices}
+  \item Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+    Ut purus elit, vestibulum ut, placerat ac, adipiscing vitae, felis.
+  \item Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+\end{xchoices}
 
-\coffin_join:NnnNnnnn \l__a_coffin {r} {H} \l__b_coffin {l} {H} {0pt} {0pt}
-
-\lipsum[1]\par
-Lipsum~ \coffin_typeset:Nnnnn \l__a_coffin {l} {H} {0pt} {0pt} \par
-\lipsum[1]\par
-
-\ExplSyntaxOff
+\lipsum[1]
 
 \end{document}
