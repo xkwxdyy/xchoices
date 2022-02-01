@@ -1327,7 +1327,8 @@
     % 将错误答案对应项数的bool设置为false
     \bool_set_false:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _bool}
     \hbox_set:cw { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box }
-      \begin{varwidth}[t]{\hsize}
+      % \begin{varwidth}[t]{\hsize}
+      \begin{varwidth}[t]{ \dim_eval:n{\hsize - 1.1\textwidth + \linewidth} }
   }
 % 用来设置标记为正确答案的选项
 \cs_new:Nn \__xchoices_env_xitem_new_correct:
@@ -1350,7 +1351,7 @@
     % 将正确答案对应项数的bool设置为true
     \bool_set_true:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _bool}
     \hbox_set:cw { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box }
-      \begin{varwidth}[t]{\hsize}
+      \begin{varwidth}[t]{ \dim_eval:n{\hsize - 1.1\textwidth + \linewidth} }
   }
 \cs_new:Nn \__xchoices_env_xitem_out:
   {
