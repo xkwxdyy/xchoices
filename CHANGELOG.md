@@ -17,6 +17,8 @@
 - 更改`\paren`名为`\xparen`
 - 更新示例文件`xchoices-test.tex`
 - 解决基线对齐问题（[#2](https://github.com/xkwxdyy/xchoices/issues/2)）
+- 修复不会自动换行的bug（[#3](https://github.com/xkwxdyy/xchoices/issues/3)）
+- 修复自动换行后长度的问题（[#3](https://github.com/xkwxdyy/xchoices/issues/3)）
 
 ## [v0.0.3] - 2022-01-31
 ### Added
