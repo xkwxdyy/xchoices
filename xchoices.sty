@@ -411,13 +411,14 @@
   {
     \int_step_inline:nn {#1}
       {
-        \use:c { __xchoices_label_pos_set_ \l__xchoices_coffin_current_label_pos_str :cc }
+        \use:c { __xchoices_label_pos_set_ \l__xchoices_coffin_current_label_pos_str :ccc }
           { l__xchoices_coffin_label_ \int_to_roman:n {##1} _coffin }
           { l__xchoices_coffin_content_ \int_to_roman:n {##1} _coffin }
+          { l__xchoices_measure_height_ \int_to_roman:n {##1} _dim }
       }
   }
 
-\cs_new:cpn { __xchoices_label_pos_set_top-center:NN } #1#2
+\cs_new:cpn { __xchoices_label_pos_set_top-center:NNN } #1#2#3
   {
     \coffin_join:NnnNnnnn
       #1 { b } { hc }
@@ -470,9 +471,9 @@
           { 0em }
       }
   }
-\cs_set_eq:cc { __xchoices_label_pos_set_top:NN } 
-{ __xchoices_label_pos_set_top-center:NN }
-\cs_new:cpn { __xchoices_label_pos_set_top-left:NN } #1#2
+\cs_set_eq:cc { __xchoices_label_pos_set_top:NNN } 
+{ __xchoices_label_pos_set_top-center:NNN }
+\cs_new:cpn { __xchoices_label_pos_set_top-left:NNN } #1#2#3
   {
     \coffin_join:NnnNnnnn
       #1 { b } { l }
@@ -526,7 +527,7 @@
       }
   }
 
-\cs_new:cpn { __xchoices_label_pos_set_top-right:NN } #1#2
+\cs_new:cpn { __xchoices_label_pos_set_top-right:NNN } #1#2#3
   {
     \coffin_join:NnnNnnnn
       #1 { b } { r }
@@ -579,7 +580,7 @@
           { 0em }
       }
   }
-\cs_new:cpn { __xchoices_label_pos_set_bottom:NN } #1#2
+\cs_new:cpn { __xchoices_label_pos_set_bottom:NNN } #1#2#3
   {
     \coffin_join:NnnNnnnn
       #1 { t } { hc }
@@ -632,9 +633,9 @@
           { 0em }
       }
   }
-\cs_set_eq:cc { __xchoices_label_pos_set_bottom-center:NN } 
-  { __xchoices_label_pos_set_bottom:NN }
-\cs_new:cpn { __xchoices_label_pos_set_bottom-left:NN } #1#2
+\cs_set_eq:cc { __xchoices_label_pos_set_bottom-center:NNN } 
+  { __xchoices_label_pos_set_bottom:NNN }
+\cs_new:cpn { __xchoices_label_pos_set_bottom-left:NNN } #1#2#3
   {
     \coffin_join:NnnNnnnn
       #1 { t } { l }
@@ -687,7 +688,7 @@
           { 0em }
       }
   }
-\cs_new:cpn { __xchoices_label_pos_set_bottom-right:NN } #1#2
+\cs_new:cpn { __xchoices_label_pos_set_bottom-right:NNN } #1#2#3
   {
     \coffin_join:NnnNnnnn
       #1 { t } { r }
@@ -740,13 +741,23 @@
           { 0em }
       }
   }
-\cs_new:cpn { __xchoices_label_pos_set_left:NN } #1#2
+\cs_new:cpn { __xchoices_label_pos_set_left:NNN } #1#2#3
   {
-    \coffin_join:NnnNnnnn
-      #1 { H } { r }
-      #2 { H } { l }
-      { 5pt + \l__xchoices_coffin_join_horizontal_sep_dim }
-      { \l__xchoices_coffin_join_vertical_sep_dim }
+    \dim_compare:nNnTF {#3} > { \baselineskip }
+      {
+        \coffin_join:NnnNnnnn
+        #1 { H } { r }
+        #2 { vc } { l }
+        { 5pt + \l__xchoices_coffin_join_horizontal_sep_dim }
+        { 2pt + \l__xchoices_coffin_join_vertical_sep_dim }
+      }
+      {
+        \coffin_join:NnnNnnnn
+          #1 { H } { r }
+          #2 { H } { l }
+          { 5pt + \l__xchoices_coffin_join_horizontal_sep_dim }
+          { \l__xchoices_coffin_join_vertical_sep_dim }
+      }
     % typeset的水平pole
     \tl_set:Nn \l__xchoices_coffin_typeset_horizontal_position_tl { l }
     % typeset的垂直pole
@@ -794,9 +805,9 @@
       }
   }
 \cs_set_eq:cc 
-  { __xchoices_label_pos_set_left-center:NN } 
-  { __xchoices_label_pos_set_left:NN }
-\cs_new:cpn { __xchoices_label_pos_set_left-top:NN } #1#2
+  { __xchoices_label_pos_set_left-center:NNN } 
+  { __xchoices_label_pos_set_left:NNN }
+\cs_new:cpn { __xchoices_label_pos_set_left-top:NNN } #1#2#3
   {
     \coffin_join:NnnNnnnn
       #1 { t } { r }
@@ -849,7 +860,7 @@
           { 0em }
       }
   }
-\cs_new:cpn { __xchoices_label_pos_set_left-bottom:NN } #1#2
+\cs_new:cpn { __xchoices_label_pos_set_left-bottom:NNN } #1#2#3
   {
     \coffin_join:NnnNnnnn
       #1 { b } { r }
@@ -902,7 +913,7 @@
           { 0em }
       }
   }
-\cs_new:cpn { __xchoices_label_pos_set_right:NN } #1#2
+\cs_new:cpn { __xchoices_label_pos_set_right:NNN } #1#2#3
   {
     \coffin_join:NnnNnnnn
       #1 { vc } { l }
@@ -956,9 +967,9 @@
       }
   }
 \cs_set_eq:cc 
-  { __xchoices_label_pos_set_right-center:NN } 
-  { __xchoices_label_pos_set_right:NN }
-\cs_new:cpn { __xchoices_label_pos_set_right-top:NN } #1#2
+  { __xchoices_label_pos_set_right-center:NNN } 
+  { __xchoices_label_pos_set_right:NNN }
+\cs_new:cpn { __xchoices_label_pos_set_right-top:NNN } #1#2#3
   {
     \coffin_join:NnnNnnnn
       #1 { t } { l }
@@ -1011,7 +1022,7 @@
           { 0em }
       }
   }
-\cs_new:cpn { __xchoices_label_pos_set_right-bottom:NN } #1#2
+\cs_new:cpn { __xchoices_label_pos_set_right-bottom:NNN } #1#2#3
   {
     \coffin_join:NnnNnnnn
       #1 { b } { l }
@@ -1074,7 +1085,7 @@
   }
   {
     \cs_generate_variant:cn
-      { __xchoices_label_pos_set_ #1 :NN } { cc }
+      { __xchoices_label_pos_set_ #1 :NNN } { ccc }
   }
 
 %% 把coffin按照自动计算的每行个数typeset出来（命令关键点）
@@ -1229,12 +1240,19 @@
             % 不存在的话就新定义
             \box_new:c { l__xchoices_measure_width_ \int_to_roman:n {##1} _box }
           }
-        % 声明dim变量
+        % 声明dim变量存宽度
         \dim_if_exist:cF
           { l__xchoices_measure_width_ \int_to_roman:n {##1} _dim}
           {
             % 不存在的话就新定义
             \dim_new:c { l__xchoices_measure_width_ \int_to_roman:n {##1} _dim }
+          }
+        % 声明dim变量存高度
+        \dim_if_exist:cF
+          { l__xchoices_measure_height_ \int_to_roman:n {##1} _dim}
+          {
+            % 不存在的话就新定义
+            \dim_new:c { l__xchoices_measure_height_ \int_to_roman:n {##1} _dim }
           }
         % 把每个选项存到对应的盒子里
         \hbox_set:cn { l__xchoices_measure_width_ \int_to_roman:n {##1} _box }
@@ -1247,6 +1265,11 @@
         \dim_set:cn { l__xchoices_measure_width_ \int_to_roman:n {##1} _dim }
           {
             \box_wd:c { l__xchoices_measure_width_ \int_to_roman:n {##1} _box }
+          }
+        % 把选项的高度进行储存
+        \dim_set:cn { l__xchoices_measure_height_ \int_to_roman:n {##1} _dim }
+          {
+            \box_ht:c { l__xchoices_measure_width_ \int_to_roman:n {##1} _box }
           }
       }
   }
