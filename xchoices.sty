@@ -1,6 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}[2018/04/01]
 \RequirePackage{expl3}
-\ProvidesExplPackage {xchoices} {2022-01-31} {0.0.3}
+\ProvidesExplPackage {xchoices} {2022-02-01} {0.0.4}
   {
     A package for flexibly LaTeXing choice items based on hlist environment and coffin.
     Kangwei Xia
@@ -1598,17 +1598,17 @@
       }
   }
 
-% \paren 
-\NewDocumentCommand{ \paren } {  }
+% \xparen 
+\NewDocumentCommand{ \xparen } {  }
   {
     \group_begin:
       % \keys_set:nn { paren-answer } {#1}
-      \tl_set:Nn \l__paren_answer_tl
+      \tl_set:Nn \l__xparen_answer_tl
         { \qquad }
       \dim_set_eq:NN \l_tmpa_dim \linegoal
       \dim_compare:nNnT { \l_tmpa_dim } < { \textwidth/50 }
         { \par }
-      \hfill \makebox{(\tl_use:N \l__paren_answer_tl)}
+      \hfill \makebox{(\tl_use:N \l__xparen_answer_tl)}
     \group_end:
   }
 % hlist相关参数设置
