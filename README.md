@@ -92,6 +92,7 @@ Author: Kangwei Xia <kangweixia_xdyy@163.com>
   - answer-label-content：答案label的内容，初始值为“【参考答案】”
   - answer-label-color：答案label的颜色，初始值为`violet`
 
+更多细节和示例请阅读[发行版](https://gitee.com/xkwxdyy/xchoices/releases)中的用户手册
 
 ## 参与贡献
 感谢[zepinglee](https://github.com/zepinglee)在本宏包编写过程中提供的大量建议和帮助！
