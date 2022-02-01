@@ -368,16 +368,16 @@
             \l__xchoices_postlabel_tl
           }
         \hcoffin_set:cn { l__xchoices_coffin_label_ \int_to_roman:n {##1} _coffin }
-          % {
-          %   \l__xchoices_prelabel_tl
-          %   \__xchoices_current_label_transform_int:n {##1}
-          %   \l__xchoices_postlabel_tl
-          % }
           {
-            \coffin_typeset:Nnnnn 
-              \l__xchoices_tmp_coffin
-              {l} {H} {0pt} {0pt}
+            \l__xchoices_prelabel_tl
+            \__xchoices_current_label_transform_int:n {##1}
+            \l__xchoices_postlabel_tl
           }
+          % {
+          %   \coffin_typeset:Nnnnn 
+          %     \l__xchoices_tmp_coffin
+          %     {l} {T} {0pt} {0pt}
+          % }
       }
   }
 \cs_generate_variant:Nn \vcoffin_set:Nnn {Nvn}
@@ -400,7 +400,7 @@
           {
             \coffin_typeset:Nnnnn 
               \l__xchoices_tmp_coffin
-              {l} {H} {0pt} {0pt}
+              {l} {T} {0pt} {0pt}
           }
       }
   }
@@ -743,8 +743,8 @@
 \cs_new:cpn { __xchoices_label_pos_set_left:NN } #1#2
   {
     \coffin_join:NnnNnnnn
-      #1 { vc } { r }
-      #2 { vc } { l }
+      #1 { H } { r }
+      #2 { H } { l }
       { 5pt + \l__xchoices_coffin_join_horizontal_sep_dim }
       { \l__xchoices_coffin_join_vertical_sep_dim }
     % typeset的水平pole

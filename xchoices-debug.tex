@@ -11,22 +11,22 @@
 \coffin_new:N \l__b_coffin
 \coffin_new:N \l__tmp_coffin
 \box_new:N \l__a_box
-\vbox_set:Nw \l__a_box
-% \hbox_set:Nw \l__a_box
-  \noindent 
-  norem~ opsum \newline
-  norem~ opsum
-\vbox_set_end:
+% \vbox_set:Nw \l__a_box
+% % \hbox_set:Nw \l__a_box
+%   \noindent 
+%   norem~ opsum \newline
+%   norem~ opsum
+% \vbox_set_end:
 \hcoffin_set:Nn \l__a_coffin
   {
     \vcoffin_set:Nnn \l__tmp_coffin { 6em }
       {
         \noindent 
         \strut
-        % % norem~ opsum \newline
+        norem~ opsum \newline
         % 夏大鱼羊 \newline
-        % Lorem~ ipsum 
-        \box_use:N \l__a_box
+        Lorem~ ipsum 
+        % \box_use:N \l__a_box
         \strut
       }
     % \coffin_mark_handle:Nnnn \l__tmp_coffin {r} {H} {red}
