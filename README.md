@@ -46,7 +46,7 @@ Author: Kangwei Xia <kangweixia_xdyy@163.com>
   showanswer = true
 ]
   \item* 正确选项
-  \item  错误选项
+  \item  \includegraphics[width = 2cm]{example-image-a}
   \item* 正确选项
   \item  错误选项
 \end{xchoices}
