@@ -341,6 +341,7 @@
       % \l__xchoices_items_number_int
       % \l__xchoices_items_seq
   }
+\coffin_new:N \l__xchoices_tmp_coffin
 %$ 声明coffin以及处理label样式
 \cs_new:Npn \__xchoices_coffin_new:N #1
   {
@@ -360,14 +361,26 @@
             \coffin_new:c { l__xchoices_coffin_label_ \int_to_roman:n {##1} _coffin }
           }
         % 将label进行储存
-        \hcoffin_set:cn { l__xchoices_coffin_label_ \int_to_roman:n {##1} _coffin }
+        \vcoffin_set:Nnn \l__xchoices_tmp_coffin {1em}
           {
             \l__xchoices_prelabel_tl
             \__xchoices_current_label_transform_int:n {##1}
             \l__xchoices_postlabel_tl
           }
+        \hcoffin_set:cn { l__xchoices_coffin_label_ \int_to_roman:n {##1} _coffin }
+          % {
+          %   \l__xchoices_prelabel_tl
+          %   \__xchoices_current_label_transform_int:n {##1}
+          %   \l__xchoices_postlabel_tl
+          % }
+          {
+            \coffin_typeset:Nnnnn 
+              \l__xchoices_tmp_coffin
+              {l} {H} {0pt} {0pt}
+          }
       }
   }
+\cs_generate_variant:Nn \vcoffin_set:Nnn {Nvn}
 %% 把seq中的选项存到coffin里
 % #1: seq的个数
 % #2: 要储存的那个seq
@@ -375,8 +388,20 @@
   {
     \int_step_inline:nn {#1}
       {
+        \vcoffin_set:Nvn \l__xchoices_tmp_coffin
+          {
+            l__xchoices_measure_width_ \int_to_roman:n {##1} _dim
+          }
+          {
+            \seq_item:Nn #2 {##1} 
+          }
         \hcoffin_set:cn { l__xchoices_coffin_content_ \int_to_roman:n {##1} _coffin }
-          { \seq_item:Nn #2 {##1} }
+          % { \seq_item:Nn #2 {##1} }
+          {
+            \coffin_typeset:Nnnnn 
+              \l__xchoices_tmp_coffin
+              {l} {H} {0pt} {0pt}
+          }
       }
   }
 %% 确定join方式
@@ -1279,8 +1304,7 @@
     % 将错误答案对应项数的bool设置为false
     \bool_set_false:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _bool}
     \hbox_set:cw { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box }
-      \begin{varwidth
-      }[t]{\hsize}
+      % \begin{varwidth}[t]{\hsize}
   }
 % 用来设置标记为正确答案的选项
 \cs_new:Nn \__xchoices_env_xitem_new_correct:
@@ -1303,11 +1327,11 @@
     % 将正确答案对应项数的bool设置为true
     \bool_set_true:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _bool}
     \hbox_set:cw { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box }
-      \begin{varwidth}[t]{\hsize}
+      % \begin{varwidth}[t]{\hsize}
   }
 \cs_new:Nn \__xchoices_env_xitem_out:
   {
-      \end{varwidth}
+      % \end{varwidth}
     \hbox_set_end:
     % 把储存好内容的box传到seq里面
     \seq_put_right:Nx \l__xchoices_env_items_seq 
