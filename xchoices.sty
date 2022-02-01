@@ -1307,6 +1307,38 @@
 \cs_generate_variant:Nn \__xchoices_pre_check_once:n {V}
 
 \seq_new:N \l__xchoices_env_items_seq   % 用来存环境的seq
+\cs_new:Npn \__xchoices_env_pre_store_label:N #1
+  {
+    % 用来存label的
+    \coffin_if_exist:cF
+      { l__xchoices_coffin_label_ \int_to_roman:n { #1 } _coffin }
+      {
+        \coffin_new:c { l__xchoices_coffin_label_ \int_to_roman:n { #1 } _coffin }
+      }
+    \vcoffin_set:Nnn \l__xchoices_tmp_coffin {1em}
+      {
+        \l__xchoices_prelabel_tl
+        \__xchoices_current_label_transform_int:n { \int_use:N #1 }
+        \l__xchoices_postlabel_tl
+      }
+    \hcoffin_set:cn { l__xchoices_coffin_label_ \int_to_roman:n { #1 } _coffin }
+      {
+        \l__xchoices_prelabel_tl
+        \__xchoices_current_label_transform_int:n { \int_use:N #1 }
+        \l__xchoices_postlabel_tl
+      }
+    % 存 label的宽度
+    \dim_if_exist:cF
+      { l__xchoices_label_width_ \int_to_roman:n { #1 } _dim}
+      {
+        % 不存在的话就新定义
+        \dim_new:c { l__xchoices_label_width_ \int_to_roman:n { #1  } _dim }
+      }
+    \dim_set:cn { l__xchoices_label_width_ \int_to_roman:n { #1  } _dim }
+      {
+        \coffin_wd:c { l__xchoices_coffin_label_ \int_to_roman:n { #1 } _coffin }
+      }
+  }
 \cs_new:Nn \__xchoices_env_xitem_new:
   {
     % 如果是第一项的话就不需要\__xchoices_env_xitem_out:
@@ -1316,19 +1348,24 @@
     % xitem计数器的值+1
     \int_incr:N \l__xchoices_env_xitem_int
     % 测试一下是否存在了对应值的box，不存在的话新声明一个
+    % 用来存选项内容
     \box_if_exist:cF { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box }
       {
         \box_new:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box }
       }
+    % 用来标记此选项是不是正确答案
     \bool_if_exist:cF { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _bool}
       {
         \bool_new:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _bool }
       }
+    % 储存label
+    \__xchoices_env_pre_store_label:N \l__xchoices_env_xitem_int
     % 将错误答案对应项数的bool设置为false
     \bool_set_false:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _bool}
     \hbox_set:cw { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box }
       % \begin{varwidth}[t]{\hsize}
-      \begin{varwidth}[t]{ \dim_eval:n{\hsize - 1.1\textwidth + \linewidth} }
+      % 调整宽度：行宽-label宽-leftmargin
+      \begin{varwidth}[t]{ \dim_eval:n{ \linewidth - \use:c { l__xchoices_label_width_ \int_to_roman:n { \l__xchoices_env_xitem_int  } _dim } - \leftmargin } }
   }
 % 用来设置标记为正确答案的选项
 \cs_new:Nn \__xchoices_env_xitem_new_correct:
@@ -1336,22 +1373,28 @@
     % 如果是第一项的话就不需要\__xchoices_env_xitem_out:
     % 只有第二项开始才需要处理上一个
     \int_compare:nNnF { \l__xchoices_env_xitem_int } = { 0 }
-      { \__xchoices_env_xitem_out: }
+    { \__xchoices_env_xitem_out: }
     % xitem计数器的值+1
     \int_incr:N \l__xchoices_env_xitem_int
     % 测试一下是否存在了对应值的box，不存在的话新声明一个
+    % 用来存选项内容
     \box_if_exist:cF { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box }
       {
         \box_new:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box }
       }
+    % 用来标记此选项是不是正确答案
     \bool_if_exist:cF { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _bool}
       {
         \bool_new:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _bool }
       }
-    % 将正确答案对应项数的bool设置为true
+    % 储存label
+    \__xchoices_env_pre_store_label:N \l__xchoices_env_xitem_int
+    % 将错误答案对应项数的bool设置为true
     \bool_set_true:c { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _bool}
     \hbox_set:cw { l__xchoices_env_ \int_to_roman:n { \l__xchoices_env_xitem_int } _box }
-      \begin{varwidth}[t]{ \dim_eval:n{\hsize - 1.1\textwidth + \linewidth} }
+      % \begin{varwidth}[t]{\hsize}
+      % 调整宽度：行宽-label宽-leftmargin
+      \begin{varwidth}[t]{ \dim_eval:n{ \linewidth - \use:c { l__xchoices_label_width_ \int_to_roman:n { \l__xchoices_env_xitem_int  } _dim } - \leftmargin } }
   }
 \cs_new:Nn \__xchoices_env_xitem_out:
   {
@@ -1556,6 +1599,7 @@
       \int_zero:N \l__xchoices_env_xitem_int   % 先将xitem计数器设置为0
       \tl_clear:N \l__xchoices_answer_analysis_content_tl
       \bool_set_false:N \l__xchoices_coffin_if_add_figure_bool
+      \keys_set:nn { xchoices / coffinchoices } {#1}
   }
   {
       \__xchoices_env_xitem_out:
