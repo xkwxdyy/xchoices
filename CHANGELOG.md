@@ -8,6 +8,10 @@
 - 保持答案正常的乱序功能
 
 ## [v0.1.0] - 2022-02-02
+### Changed
+- 将`hlist`的设置从`sethlist`改为环境的可选参数
+- 去掉`xchoices`环境中`varwidth`环境的`- \leftmargin`
+
 ### Removed
 - 删去`mode`键值
 
