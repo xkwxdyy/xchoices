@@ -6,8 +6,8 @@
     author            = {夏康玮},
     title             = {\pkg{xchoices} 宏包},
     email             = {kangweixia_xdyy@163.com},
-    date              = {2022-02-01},
-    version           = {0.0.3},
+    date              = {2022-02-02},
+    version           = {0.1.0},
     github-repository = {https://github.com/xkwxdyy/xchoices},
     gitee-repository  = {https://gitee.com/xkwxdyy/xchoices},
   }
@@ -620,28 +620,28 @@
 \end{vexample}
 
 
-\subsubsection{ \cmd{mode} }
+% \subsubsection{ \cmd{mode} }
 
-\begin{function}{mode}
-  \begin{syntax}
-    |mode| = \meta{text, figure} \init{text}
-  \end{syntax}
-  当前的选项模式。 \cmd{text} 表示文本模式， \cmd{figure} 表示图片模式，在选项中有插图命令是可切换为图片模式，偏移的参数会进行相应细微的调整。
-\end{function}
+% \begin{function}{mode}
+%   \begin{syntax}
+%     |mode| = \meta{text, figure} \init{text}
+%   \end{syntax}
+%   当前的选项模式。 \cmd{text} 表示文本模式， \cmd{figure} 表示图片模式，在选项中有插图命令是可切换为图片模式，偏移的参数会进行相应细微的调整。
+% \end{function}
 
-\begin{vexample}
-    \begin{xchoices}[mode = text, label-pos = bottom-center]
-      \item* 正确答案
-      \item* \includegraphics[width = 2cm]{example-image-a}
-      \item 错误答案
-      \item 错误答案
-    \end{xchoices}
+% \begin{vexample}
+%     \begin{xchoices}[mode = text, label-pos = bottom-center]
+%       \item* 正确答案
+%       \item* \includegraphics[width = 2cm]{example-image-a}
+%       \item 错误答案
+%       \item 错误答案
+%     \end{xchoices}
 
-    \begin{xchoices}[mode = figure, label-pos = bottom-center]
-      \item* 正确答案
-      \item* \includegraphics[width = 2cm]{example-image-a}
-      \item 错误答案
-      \item 错误答案
-    \end{xchoices}
-\end{vexample}
+%     \begin{xchoices}[mode = figure, label-pos = bottom-center]
+%       \item* 正确答案
+%       \item* \includegraphics[width = 2cm]{example-image-a}
+%       \item 错误答案
+%       \item 错误答案
+%     \end{xchoices}
+% \end{vexample}
 \end{document}
