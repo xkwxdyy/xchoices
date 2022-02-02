@@ -7,6 +7,10 @@
 ```
 - 保持答案正常的乱序功能
 
+## [v0.0.5] - 2022-02-02
+### Fixed
+- 修复标签对齐问题并重新调整不同`label-pos`的参数（[#4](https://github.com/xkwxdyy/xchoices/issues/4)）
+
 ## [v0.0.4] - 2022-02-01
 ### Added
 - 上传用户手册
