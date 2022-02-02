@@ -8,6 +8,9 @@
 - 保持答案正常的乱序功能
 
 ## [v0.1.0] - 2022-02-02
+### Removed
+- 删去`mode`键值
+
 ### Fixed
 - 修复标签对齐问题并重新调整不同`label-pos`的参数（[#4](https://github.com/xkwxdyy/xchoices/issues/4)）
 
