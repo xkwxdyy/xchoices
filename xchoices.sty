@@ -83,6 +83,7 @@
 
 %%%% 产生变体函数 %%%%
 \cs_generate_variant:Nn \dim_set:Nn { Nv, cv}
+\cs_generate_variant:Nn \dim_set:Nn { NV }
 \cs_generate_variant:Nn \dim_max:nn { Vv }
 \cs_generate_variant:Nn \seq_set_split:Nnn {NnV}
 \prg_generate_conditional_variant:Nnn \str_if_eq:nn {Vn} {TF}
@@ -256,7 +257,7 @@
     label-vsep .initial:n = 0pt,
     % label的水平偏移量
     label-hsep .dim_set:N = \l__xchoices_coffin_join_horizontal_sep_dim,
-    label-hsep .initial:n = 0pt,
+    label-hsep .initial:n = 5pt,
     % 每行多少个
     items .int_set:N = \l__xchoices_items_per_line_int,
     % 两行之间的额外间距
@@ -748,14 +749,14 @@
         \coffin_join:NnnNnnnn
         #1 { H } { r }
         #2 { vc } { l }
-        { 5pt + \l__xchoices_coffin_join_horizontal_sep_dim }
+        { 0pt + \l__xchoices_coffin_join_horizontal_sep_dim }
         { 2pt + \l__xchoices_coffin_join_vertical_sep_dim }
       }
       {
         \coffin_join:NnnNnnnn
           #1 { H } { r }
           #2 { H } { l }
-          { 5pt + \l__xchoices_coffin_join_horizontal_sep_dim }
+          { 0pt + \l__xchoices_coffin_join_horizontal_sep_dim }
           { \l__xchoices_coffin_join_vertical_sep_dim }
       }
     % typeset的水平pole
@@ -812,7 +813,7 @@
     \coffin_join:NnnNnnnn
       #1 { t } { r }
       #2 { t } { l }
-      { 5pt + \l__xchoices_coffin_join_horizontal_sep_dim }
+      { \l__xchoices_coffin_join_horizontal_sep_dim }
       { 0pt + \l__xchoices_coffin_join_vertical_sep_dim }
     % typeset的水平pole
     \tl_set:Nn \l__xchoices_coffin_typeset_horizontal_position_tl { l }
@@ -865,7 +866,7 @@
     \coffin_join:NnnNnnnn
       #1 { b } { r }
       #2 { b } { l }
-      { 5pt + \l__xchoices_coffin_join_horizontal_sep_dim }
+      { \l__xchoices_coffin_join_horizontal_sep_dim }
       { \l__xchoices_coffin_join_vertical_sep_dim }
     % typeset的水平pole
     \tl_set:Nn \l__xchoices_coffin_typeset_horizontal_position_tl { l }
@@ -918,7 +919,7 @@
     \coffin_join:NnnNnnnn
       #1 { vc } { l }
       #2 { vc } { r }
-      { -5pt + \l__xchoices_coffin_join_horizontal_sep_dim }
+      { -10pt + \l__xchoices_coffin_join_horizontal_sep_dim }
       { \l__xchoices_coffin_join_vertical_sep_dim }
     % typeset的水平pole
     \tl_set:Nn \l__xchoices_coffin_typeset_horizontal_position_tl { r }
@@ -974,7 +975,7 @@
     \coffin_join:NnnNnnnn
       #1 { t } { l }
       #2 { t } { r }
-      { -5pt + \l__xchoices_coffin_join_horizontal_sep_dim }
+      { -10pt + \l__xchoices_coffin_join_horizontal_sep_dim }
       { \l__xchoices_coffin_join_vertical_sep_dim }
     % typeset的水平pole
     \tl_set:Nn \l__xchoices_coffin_typeset_horizontal_position_tl { r }
@@ -1027,7 +1028,7 @@
     \coffin_join:NnnNnnnn
       #1 { b } { l }
       #2 { b } { r }
-      { -5pt + \l__xchoices_coffin_join_horizontal_sep_dim }
+      { -10pt + \l__xchoices_coffin_join_horizontal_sep_dim }
       { \l__xchoices_coffin_join_vertical_sep_dim }
     % typeset的水平pole
     \tl_set:Nn \l__xchoices_coffin_typeset_horizontal_position_tl { r }
@@ -1590,6 +1591,27 @@
           }
       }
   }
+\tl_new:N \l__xchoices_label_hsep_init_tl    % 用于辅助判断
+\cs_new:Npn \__xchoices_label_hsep_init:N #1
+  {
+    \str_if_in:NnTF #1 {left}
+      {
+        \tl_set:Nn \l__xchoices_label_hsep_init_tl {5pt}
+      }
+      {
+        \str_if_in:NnTF #1 {right}
+          {
+            \tl_set:Nn \l__xchoices_label_hsep_init_tl {-5pt}
+          }
+          {
+            \tl_set:Nn \l__xchoices_label_hsep_init_tl {0pt}
+          }
+      }
+    \dim_set:NV
+      \l__xchoices_coffin_join_horizontal_sep_dim
+      \l__xchoices_label_hsep_init_tl
+    % \dim_use:N \l__xchoices_coffin_join_horizontal_sep_dim
+  }
 \NewDocumentEnvironment { xchoices } { O{} }
   {
     \group_begin:
@@ -1614,7 +1636,12 @@
       % \seq_set_split:Nnn \l__xchoices_env_check_if_figure_seq { \item } {#2}
       % 将正确答案进行储存输出
       \__xchoices_env_output_correct_items_number_to_seq:
-      \keys_set:nn { xchoices / coffinchoices } {#1}
+      % % 设置label-hsep的初始值（直接在coffin的里面设置初始值会有问题）
+      % % 而且left和right系列的初始值不同
+      % % 【后续】经测试 这样设置初值也不行，只能通过keys的初值
+      % \__xchoices_label_hsep_init:N
+      %   \l__xchoices_coffin_current_label_pos_str
+      % \keys_set:nn { xchoices / coffinchoices } {#1}
       % 新声明coffin并且进行内容的储存
       \__xchoices_coffin_input:NNN
         \l__xchoices_env_items_seq
