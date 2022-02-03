@@ -282,10 +282,10 @@
     v-offset .dim_set:N = \l__xchoices_coffin_typeset_vertical_transform_dim,
     % xchoices*环境与上方的距离
     top .dim_set:N = \l__xchoices_env_top_distance_dim,
-    top .initial:n = 0pt,
+    top .initial:n = -7pt,
     % xchoices*环境与下方的距离
     bottom .dim_set:N = \l__xchoices_env_bottom_distance_dim,
-    bottom .initial:n = 0em,
+    bottom .initial:n = -5pt,
     % % 文本模式还是图片模式（偏移量不同）
     % mode .choice:,
     % mode / text .code:n = 
@@ -896,7 +896,7 @@
     %   {
         %%% 无图版本 %%%
         % 两行之间的垂直偏移量
-        \dim_set:Nn \l__xchoices_coffin_hlist_vsep_dim { 0em }
+        \dim_set:Nn \l__xchoices_coffin_hlist_vsep_dim { 0.5em }
         % typeset的水平偏移
         \dim_set:Nn \l__xchoices_coffin_typeset_horizontal_transform_dim 
           {
@@ -1461,7 +1461,7 @@
   {
     \bool_if:NT \__xchoices_env_show_answer_bool
       {
-        \vspace*{1em}
+        % \vspace*{1em}
         \noindent
         \textcolor
           { \tl_use:N \l__xchoices_env_answer_label_color_tl}
@@ -1621,12 +1621,12 @@
             { \__xchoices_env_xitem_new_correct: }
             { \__xchoices_env_xitem_new: }
         }
+      \keys_set:nn { xchoices / coffinchoices } {#1}
       \vspace*{ \l__xchoices_env_top_distance_dim }
       \mode_leave_vertical:
       \int_zero:N \l__xchoices_env_xitem_int   % 先将xitem计数器设置为0
       \tl_clear:N \l__xchoices_answer_analysis_content_tl
       % \bool_set_false:N \l__xchoices_coffin_if_add_figure_bool
-      \keys_set:nn { xchoices / coffinchoices } {#1}
   }
   {
       \__xchoices_env_xitem_out:

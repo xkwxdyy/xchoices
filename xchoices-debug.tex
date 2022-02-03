@@ -123,23 +123,49 @@
 % \end{document}
 
 % \documentclass[twocolumn]{ctexart}
-\documentclass{article}
+\documentclass{ctexart}
 \usepackage{geometry}
-\usepackage{lipsum}
+\usepackage{amsmath}
 \usepackage{xchoices}
-
+\xchoicesetup{
+  % showanswer,
+  label-pos = left
+}
 \geometry{showframe}
 
 \begin{document}
-item \lipsum[1]\par
 \begin{enumerate}
-  \item \lipsum[1]
-    \begin{xchoices}[label-pos = right-bottom]
-      \item \lipsum[1]
+  \item 
+  在直角坐标系中, 已知 $O$ 为坐标原点, $A(-1,0), B(1,0)$. 点 $P$ 满是 $k_{P A} \cdot k_{P B}=3$ 且 $|P A|+|PB|=4$, 则 $|OP|=$\xparen
+      \begin{xchoices}[label-pos = left]
+        \item*  $\dfrac{7 \sqrt{13}}{13}$
+        \item $\dfrac{\sqrt{85}}{5}$
+        \item* $\dfrac{5 \sqrt{13}}{13}$
+        \item $\dfrac{\sqrt{13}}{2}$
+      \end{xchoices}
+  \item 
+  在直角坐标系中, 已知 $O$ 为坐标原点, $A(-1,0), B(1,0)$. 点 $P$ 满是 $k_{P A} \cdot k_{P B}=3$ 且 $|P A|+|PB|=4$, 则 $|OP|=$\xparen
+    \begin{xchoices}[label-pos = left]
+      \item 1
+      \item* 2
+      \item 3
+      \item* 4
     \end{xchoices}
-  \item \lipsum[1]
+  \item 
+    在直角坐标系中, 已知 $O$ 为坐标原点, $A(-1,0), B(1,0)$. 点 $P$ 满是 $k_{P A} \cdot k_{P B}=3$ 且 $|P A|+|PB|=4$, 则 $|OP|=$\xparen
+    \begin{xchoices}
+      \item 1
+      \item 2
+      \item 3
+      \item 4
+    \end{xchoices}
+  \item 
+    在直角坐标系中, 已知 $O$ 为坐标原点, $A(-1,0), B(1,0)$. 点 $P$ 满是 $k_{P A} \cdot k_{P B}=3$ 且 $|P A|+|PB|=4$, 则 $|OP|=$\xparen
+    \begin{xchoices}
+      \item 1
+      \item 2
+      \item 3
+      \item 4
+    \end{xchoices}
 \end{enumerate}
-\begin{xchoices}[label-pos = right-top]
-  \item \lipsum[1]
-\end{xchoices}
 \end{document}
