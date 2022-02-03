@@ -124,40 +124,22 @@
 
 % \documentclass[twocolumn]{ctexart}
 \documentclass{article}
-\usepackage[paperwidth = 20cm]{geometry}
-\usepackage{xchoices}
+\usepackage{geometry}
 \usepackage{lipsum}
+\usepackage{xchoices}
+
+\geometry{showframe}
 
 \begin{document}
-\begin{xchoices}
-  \item Lorem ipsum.
-  \item orem ipsum.
-\end{xchoices}
-\lipsum[1]
-
+item \lipsum[1]\par
 \begin{enumerate}
-  \item Lorem ipsum.
-    \begin{xchoices}[]
-      \item Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-        Ut purus elit, vestibulum ut, placerat ac, adipiscing vitae, felis.
-      \item* Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+  \item \lipsum[1]
+    \begin{xchoices}[label-pos = right-bottom]
+      \item \lipsum[1]
     \end{xchoices}
-  \item \begin{enumerate}
-    \item \begin{xchoices}
-      \item Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-        Ut purus elit, vestibulum ut, placerat ac, adipiscing vitae, felis.
-      \item Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-    \end{xchoices}
-  \end{enumerate}
+  \item \lipsum[1]
 \end{enumerate}
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-        Ut purus elit, vestibulum ut, placerat ac, adipiscing vitae, felis.
-\begin{xchoices}
-  \item Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-    Ut purus elit, vestibulum ut, placerat ac, adipiscing vitae, felis.
-  \item Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+\begin{xchoices}[label-pos = right-top]
+  \item \lipsum[1]
 \end{xchoices}
-
-\lipsum[1]
-
 \end{document}
