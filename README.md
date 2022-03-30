@@ -94,6 +94,10 @@ Author: Kangwei Xia <kangweixia_xdyy@163.com>
 
 更多细节和示例请阅读[发行版](https://gitee.com/xkwxdyy/xchoices/releases)中的用户手册
 
+## TO-DO
+
+- `NewXChoices`：新建样式
+- 显示答案中，答案的连接符设置
 ## 参与贡献
 感谢[zepinglee](https://github.com/zepinglee)在本宏包编写过程中提供的大量建议和帮助！
 
