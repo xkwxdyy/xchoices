@@ -27,12 +27,12 @@ Author: Kangwei Xia <kangweixia_xdyy@163.com>
 
 ## 宏包说明
 
-本宏包为本人前段时间编写的宏包`choices`的重新推翻编写的版本，并增添完善了许多功能
+本宏包为本人前段时间编写的宏包 `choices` 的重新推翻编写的版本，并增添完善了许多功能
 （choices宏包仓库：[github](https://github.com/xkwxdyy/xchoices), [gitee](https://gitee.com/xkwxdyy/xchoices)）
 
 
 ### 变更
-- `choices`宏包更名为`xchoices`宏包，`x`寓意为`etra`，可以避免与`exam.cls`冲突，并能同时使用
+- `choices`宏包更名为`xchoices`宏包，`x`寓意为 `extra` ，可以避免与`exam.cls`冲突，并能同时使用
 - 更改全局设置接口为`\xchoicesetup`
 - 统一所有选项排版命令为`xchoices`环境
 
